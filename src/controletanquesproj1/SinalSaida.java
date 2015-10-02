@@ -27,7 +27,7 @@ public class SinalSaida {
     private double duracaoMin;
     
     /*****Entradas Malha Fechada*****/
-    private int tipoControle;
+    private int tipoSistemaControle;
     private double PV;
     private double nivelTanqueTrava;
     private double setPoint;
@@ -37,20 +37,33 @@ public class SinalSaida {
     private double tensaoSaida;
     
     /*****Entradas Controle*****/
-    private double erro;  
-    private double erroAnterior;
     private double kp;
     private double kd;
     private double ki;
     private double td;
     private double ti;
-    private boolean segundaOrdem;
+    //private boolean segundaOrdem;
+    private int tipoControle;
+    
+    /*****Entradas Controle_MI*****/
+    private double kp_MI;
+    private double kd_MI;
+    private double ki_MI;
+    private double td_MI;
+    private double ti_MI;
+    private int tipoControle_MI;
     
     /*****Saídas Controle*****/    
     private double sinalDeControle;
     private double acaoP;
     private double acaoI;
     private double acaoD;
+    
+    /*****Saídas Controle_MI*****/    
+    private double sinalDeControle_MI;
+    private double acaoP_MI;
+    private double acaoI_MI;
+    private double acaoD_MI;
     
     
     /*****Entradas Filtro*****/
@@ -60,13 +73,28 @@ public class SinalSaida {
     private double gama;//Constante Filtro Derivativo
     private boolean filtroDerivativo;
     
-    
+    /*****Entradas Filtro_MI*****/
+    private boolean antiWindup_MI;
+    private double tauAW_MI;
+    private boolean integracaoCondicional_MI;
+    private double gama_MI;//Constante Filtro Derivativo
+    private boolean filtroDerivativo_MI;
     
     /*****Variáveis de Estado Controle*****/
+    private double erro;  
+    private double erroAnterior;
     private double somaErro;
     private double difSaturacao;
     private double PVAnterior;
     private double tempoAnterior; //Usado para calcular passo
+    
+    /*****Variáveis de Estado Controle_MI*****/
+    private double erro_MI;  
+    private double erroAnterior_MI;
+    private double somaErro_MI;
+    private double difSaturacao_MI;
+    private double PVAnterior_MI;
+    private double tempoAnterior_MI; //Usado para calcular passo
     
     /*****Entradas Segunda Ordem*****/
     private int tipoOvershoot; //0 - Absoluto; 1 - Percentual
@@ -136,13 +164,37 @@ public class SinalSaida {
         overshoot = 0.0;
         tempoPico = 0.0;
         tempoAcomodacao = 0.0;
+        
+        kp_MI = 0.0;
+        kd_MI = 0.0;
+        ki_MI = 0.0;
+        td_MI = 0.0;
+        ti_MI = 0.0;
+
+        /*****Saídas Controle_MI*****/    
+        sinalDeControle_MI = 0.0;
+        acaoP_MI = 0.0;
+        acaoI_MI = 0.0;
+        acaoD_MI = 0.0;
+
+        /*****Entradas Filtro_MI*****/
+        antiWindup_MI = false;
+        tauAW_MI = 0.0;
+        integracaoCondicional_MI = false;
+        gama_MI = 0.0;//Constante Filtro Derivativo
+        filtroDerivativo_MI = false;
+
+
+        /*****Variáveis de Estado Controle_MI*****/
+        erro_MI = 0.0;  
+        erroAnterior_MI = 0.0;
+        somaErro_MI = 0.0;
+        difSaturacao_MI = 0.0;
+        PVAnterior_MI = 0.0;
     }
 
-    void calcularAmplitudeAtual(double tempoEmS, Tempo tempoClasse)
+    void calculoMalhaAberta(double tempoEmS, Tempo tempoClasse)
     {
-        //double diferencaDeTempo = tempoEmS - tempoAnterior;
-        double diferencaDeTempo = 0.1 ;                 //Tempo de amostra fixa
-        
         tempoAnterior = tempoEmS;
         switch(tipo)
         {
@@ -202,243 +254,239 @@ public class SinalSaida {
         }
 
         amplitude += offset;    
+    }
+    
+    void calculoMalhaFechada(double diferencaDeTempo)
+    {
+        setSetPoint(amplitude); 
+        if(setPoint != SPAtual)
+        {
+            mudouSinal = true;
+        }
+        erroAnterior = getErro();
+        erro = setPoint - PV;
 
-        if( isMalhaFechada())
-        {   
-            setSetPoint(amplitude); 
-            if(setPoint != SPAtual)
+        if(getTipoControle() == 0) //P
+        {
+            somaErro = 0.0;
+            acaoP = getErro()*getKp();
+            amplitude = getAcaoP();
+        }
+        else if(getTipoControle() == 1) //PD kd
+        {
+            somaErro = 0.0;
+            acaoP = getErro()*getKp();
+            acaoD = getKd()*(getErro()-erroAnterior)/diferencaDeTempo;
+            if(filtroDerivativo)
             {
-                mudouSinal = true;
+                acaoD = acaoD/(1 + gama*acaoD);
             }
-            erroAnterior = getErro();
-            erro = setPoint - PV;
-        
-            if(getTipoControle() == 0) //P
+            amplitude = getAcaoP() + getAcaoI();
+        }
+        else if(getTipoControle() == 2) //PI ki
+        {
+            acaoP = getErro()*getKp();
+            if(isAntiWindup() && sinalDeControle != tensaoSaida)
             {
-                somaErro = 0.0;
-                acaoP = getErro()*getKp();
-                amplitude = getAcaoP();
+                difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();   
+                acaoI = somaErro + (getKi()*getErro() - kp*difSaturacao)*diferencaDeTempo ;
+                amplitude = getAcaoP() + getAcaoI();
+                somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
             }
-            else if(getTipoControle() == 1) //PD kd
+            else 
             {
-                somaErro = 0.0;
-                acaoP = getErro()*getKp();
-                acaoD = getKd()*(getErro()-erroAnterior)/diferencaDeTempo;
-                if(filtroDerivativo)
-                {
-                    acaoD = acaoD/(1 + gama*acaoD);
+                if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
+                {   
+                    acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
+                    somaErro += ki*getErro()*diferencaDeTempo;
                 }
                 amplitude = getAcaoP() + getAcaoI();
             }
-            else if(getTipoControle() == 2) //PI ki
-            {
-                acaoP = getErro()*getKp();
-                if(isAntiWindup() && sinalDeControle != tensaoSaida)
-                {
-                    difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();   
-                    acaoI = somaErro + (getKi()*getErro() - kp*difSaturacao)*diferencaDeTempo ;
-                    amplitude = getAcaoP() + getAcaoI();
-                    somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
-                }
-                else 
-                {
-                    if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
-                    {   
-                        acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
-                        somaErro += ki*getErro()*diferencaDeTempo;
-                    }
-                    amplitude = getAcaoP() + getAcaoI();
-                }
-            }
-            else if(getTipoControle() == 3) //PID kd e ki
-            {
-                acaoP = getErro()*getKp();
-                acaoD = getKd()*(getErro()-erroAnterior)/diferencaDeTempo;
-                if(filtroDerivativo)
-                {
-                    //acaoD = acaoD/(1 + gama*(acaoD/kp));
-                    acaoD = acaoD/(1 + gama*(acaoD/(kp*erro)));
-                }
-                if(isAntiWindup() && sinalDeControle != tensaoSaida)
-                {
-                    difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();   
-                    acaoI = somaErro + (getKi()*getErro() - kp*difSaturacao)*diferencaDeTempo ;
-                    amplitude = getAcaoP() + getAcaoI() + getAcaoD();
-                    somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
-                }
-                else 
-                {
-                    if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
-                    {   
-                        acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
-                        somaErro += ki*getErro()*diferencaDeTempo;
-                    }
-                    amplitude = getAcaoP() + getAcaoI() + getAcaoD();
-                }
-            }
-            else if(getTipoControle() == 4) //PI-D kd e ki
-            {
-                acaoP = getErro()*getKp();
-                acaoD = getKd()*(PV-PVAnterior)/diferencaDeTempo;
-                if(filtroDerivativo)
-                {
-                    acaoD = acaoD/(1 + gama*acaoD);
-                }
-                if(isAntiWindup() && sinalDeControle != tensaoSaida)
-                {
-                    difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();
-                    acaoI = somaErro + ( getKi()*getErro() - kp*difSaturacao )*diferencaDeTempo ;
-                    amplitude = getAcaoP() + getAcaoI() + getAcaoD();
-                    somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
-                }
-                else 
-                {   
-                    if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
-                    {   
-                        acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
-                        somaErro += ki*getErro()*diferencaDeTempo;
-                    }
-                    amplitude = getAcaoP() + getAcaoI() + getAcaoD();
-                }
-            }
-            
-            if(segundaOrdem) //Segunda Ordem
-            {                   
-                if(mudouSinal)
-                {
-                    tempoSubida = 0.0;
-                    overshoot = PV;
-                    overshootSat = PV;
-                    tempoPico = 0.0;
-                    tempoAcomodacao = 0.0;
-                    tempoInicioSinalNovo = tempoEmS;
-                    SPAnterior = SPAtual;
-                    SPAtual = setPoint;
-                    calculouInicioTempoSubida = false;
-                    calculouTempoSubida = false;
-                    calculouOvershoot = false;
-                    mudancaSP = SPAtual - SPAnterior;
-                    
-                    mudouSinal = false;
-                }
-                else //Verificar atraso de transporte
-                {
-                    derivadaPV = (PV-PVAnterior)/diferencaDeTempo;
-                    if(mudancaSP <= 0.0)
-                    {
-                        CalcularTempoDescida(tempoEmS);
-                        
-                        //Calculo Overshoot
-                        if(!isCalculouOvershoot())
-                        {
-                            overshootMin(tempoEmS);
-                            if(PV <= setPoint && derivadaPV >= 0.6)
-                            {
-                                calculouOvershoot = true;
-                            }
-                        }
-                    }
-                    else //SPAtual > SPAnterior
-                    {
-                        CalcularTempoSubida(tempoEmS);
-                        if(!isCalculouOvershoot())
-                        {
-                            overshootMax(tempoEmS);
-                            if(PV >= setPoint && derivadaPV <= -0.6)
-                            {
-                                calculouOvershoot = true;
-                            }
-                        }
-                        //Calculo Overshoot
-                    }
-                    switch(tipoTempoAcomodacao)
-                    {
-                        case 0:
-                        {
-                            if(isPareceAcomodado())
-                            {
-                                if((PV > 1.02*setPoint) || (PV < 0.98*setPoint))
-                                {   
-                                    pareceAcomodado = false;
-                                }
-                            }
-                            else
-                            {
-                                if((PV >= 0.98*setPoint) && (PV <= 1.02*setPoint))
-                                {   
-                                    pareceAcomodado = true;
-                                    tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
-                                }
-                            }
-                        }
-                        case 1:
-                        {
-                            if(isPareceAcomodado())
-                            {
-                                if((PV > 1.05*setPoint) || (PV < 0.95*setPoint))
-                                {   
-                                    pareceAcomodado = false;
-                                }
-                            }
-                            else
-                            {
-                                if((PV >= 0.95*setPoint) && (PV <= 1.05*setPoint))
-                                {   
-                                    pareceAcomodado = true;
-                                    tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
-                                }
-                            }
-                        }
-                        case 2:
-                        {
-                            if(isPareceAcomodado())
-                            {
-                                if((PV > 1.07*setPoint) || (PV < 0.93*setPoint))
-                                {   
-                                    pareceAcomodado = false;
-                                }
-                            }
-                            else
-                            {
-                                if((PV >= 0.93*setPoint) && (PV <= 1.07*setPoint))
-                                {   
-                                    pareceAcomodado = true;
-                                    tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
-                                }
-                            }
-                        }
-                        case 3:
-                        {
-                            if(isPareceAcomodado())
-                            {//Ver getDerivada
-                                if((PV > 1.1*setPoint) || (PV < 0.9*setPoint))
-                                {   
-                                    pareceAcomodado = false;
-                                }
-                            }
-                            else
-                            {
-                                if((PV >= 0.9*setPoint) && (PV <= 1.1*setPoint))
-                                {   
-                                    pareceAcomodado = true;
-                                    tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println("Diferenca de Tempo: " + diferencaDeTempo);
         }
-        else
+        else if(getTipoControle() == 3) //PID kd e ki
         {
-            setSetPoint(0.0);
+            acaoP = getErro()*getKp();
+            acaoD = getKd()*(getErro()-erroAnterior)/diferencaDeTempo;
+            if(filtroDerivativo)
+            {
+                //acaoD = acaoD/(1 + gama*(acaoD/kp));
+                acaoD = acaoD/(1 + gama*(acaoD/(kp*erro)));
+            }
+            if(isAntiWindup() && sinalDeControle != tensaoSaida)
+            {
+                difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();   
+                acaoI = somaErro + (getKi()*getErro() - kp*difSaturacao)*diferencaDeTempo ;
+                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
+                somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
+            }
+            else 
+            {
+                if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
+                {   
+                    acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
+                    somaErro += ki*getErro()*diferencaDeTempo;
+                }
+                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
+            }
         }
-        
+        else if(getTipoControle() == 4) //PI-D kd e ki
+        {
+            acaoP = getErro()*getKp();
+            acaoD = getKd()*(PV-PVAnterior)/diferencaDeTempo;
+            if(filtroDerivativo)
+            {
+                acaoD = acaoD/(1 + gama*acaoD);
+            }
+            if(isAntiWindup() && sinalDeControle != tensaoSaida)
+            {
+                difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();
+                acaoI = somaErro + ( getKi()*getErro() - kp*difSaturacao )*diferencaDeTempo ;
+                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
+                somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
+            }
+            else 
+            {   
+                if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
+                {   
+                    acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
+                    somaErro += ki*getErro()*diferencaDeTempo;
+                }
+                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
+            }
+        }
         PVAnterior = PV;
-        tensaoSaida = amplitude;
         sinalDeControle = amplitude;
-        
+    }
+    
+    void calcularIndicadoresDeSegundaOrdem(double tempoEmS, double diferencaDeTempo)
+    {
+        if(mudouSinal)
+        {
+            tempoSubida = 0.0;
+            overshoot = PV;
+            overshootSat = PV;
+            tempoPico = 0.0;
+            tempoAcomodacao = 0.0;
+            tempoInicioSinalNovo = tempoEmS;
+            SPAnterior = SPAtual;
+            SPAtual = setPoint;
+            calculouInicioTempoSubida = false;
+            calculouTempoSubida = false;
+            calculouOvershoot = false;
+            mudancaSP = SPAtual - SPAnterior;
+
+            mudouSinal = false;
+        }
+        else //Verificar atraso de transporte
+        {
+            derivadaPV = (PV-PVAnterior)/diferencaDeTempo;
+            if(mudancaSP <= 0.0)
+            {
+                CalcularTempoDescida(tempoEmS);
+
+                //Calculo Overshoot
+                if(!isCalculouOvershoot())
+                {
+                    overshootMin(tempoEmS);
+                    if(PV <= setPoint && derivadaPV >= 0.6)
+                    {
+                        calculouOvershoot = true;
+                    }
+                }
+            }
+            else //SPAtual > SPAnterior
+            {
+                CalcularTempoSubida(tempoEmS);
+                if(!isCalculouOvershoot())
+                {
+                    overshootMax(tempoEmS);
+                    if(PV >= setPoint && derivadaPV <= -0.6)
+                    {
+                        calculouOvershoot = true;
+                    }
+                }
+                //Calculo Overshoot
+            }
+            switch(tipoTempoAcomodacao)
+            {
+                case 0:
+                {
+                    if(isPareceAcomodado())
+                    {
+                        if((PV > 1.02*setPoint) || (PV < 0.98*setPoint))
+                        {   
+                            pareceAcomodado = false;
+                        }
+                    }
+                    else
+                    {
+                        if((PV >= 0.98*setPoint) && (PV <= 1.02*setPoint))
+                        {   
+                            pareceAcomodado = true;
+                            tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
+                        }
+                    }
+                }
+                case 1:
+                {
+                    if(isPareceAcomodado())
+                    {
+                        if((PV > 1.05*setPoint) || (PV < 0.95*setPoint))
+                        {   
+                            pareceAcomodado = false;
+                        }
+                    }
+                    else
+                    {
+                        if((PV >= 0.95*setPoint) && (PV <= 1.05*setPoint))
+                        {   
+                            pareceAcomodado = true;
+                            tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
+                        }
+                    }
+                }
+                case 2:
+                {
+                    if(isPareceAcomodado())
+                    {
+                        if((PV > 1.07*setPoint) || (PV < 0.93*setPoint))
+                        {   
+                            pareceAcomodado = false;
+                        }
+                    }
+                    else
+                    {
+                        if((PV >= 0.93*setPoint) && (PV <= 1.07*setPoint))
+                        {   
+                            pareceAcomodado = true;
+                            tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
+                        }
+                    }
+                }
+                case 3:
+                {
+                    if(isPareceAcomodado())
+                    {//Ver getDerivada
+                        if((PV > 1.1*setPoint) || (PV < 0.9*setPoint))
+                        {   
+                            pareceAcomodado = false;
+                        }
+                    }
+                    else
+                    {
+                        if((PV >= 0.9*setPoint) && (PV <= 1.1*setPoint))
+                        {   
+                            pareceAcomodado = true;
+                            tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    void setarTravas()
+    {
         if(amplitude > 4)
         {
                 tensaoSaida = 4;
@@ -463,11 +511,153 @@ public class SinalSaida {
         {
               tensaoSaida = 0;
         }
-        /*****************SIMULAÇÃO**********/
-            //PV += (0.2*tensaoSaida - PV*0.01);
-            nivelTanqueTrava += (0.2*tensaoSaida - nivelTanqueTrava*0.01);
-            PV += (0.3*nivelTanqueTrava - PV*0.01);
-        //*/
+    }
+    
+    void calculoCascata(double diferencaDeTempo)
+    {
+        
+        //erroAnterior = getErro();
+        erro_MI = amplitude - nivelTanqueTrava;
+        
+        if(tipoControle_MI == 0) //P
+        {
+            somaErro_MI = 0.0;
+            acaoP_MI = erro_MI*kp_MI;
+            sinalDeControle_MI = acaoP_MI;
+        }
+        else if(tipoControle_MI == 1) //PD kd
+        {
+            somaErro_MI = 0.0;
+            acaoP_MI = erro_MI*kp_MI;
+            acaoD_MI = kd*(erro_MI-erroAnterior_MI)/diferencaDeTempo;
+            if(filtroDerivativo_MI)
+            {
+                acaoD_MI = acaoD_MI/(1 + gama_MI*acaoD_MI);
+            }
+            sinalDeControle_MI = acaoP_MI + acaoI_MI;
+        }
+        else if(tipoControle_MI == 2) //PI ki
+        {
+            acaoP_MI = erro_MI*kp_MI;
+            if(antiWindup_MI && sinalDeControle_MI != tensaoSaida)
+            {
+                difSaturacao_MI = (sinalDeControle_MI - tensaoSaida)/tauAW_MI;   
+                acaoI_MI = somaErro_MI + (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo ;
+                sinalDeControle_MI = acaoP_MI + acaoI_MI;
+                somaErro_MI += (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo;
+            }
+            else 
+            {
+                if(!integracaoCondicional_MI || sinalDeControle_MI == tensaoSaida)
+                {   
+                    acaoI_MI = somaErro_MI + ki_MI*erro_MI*diferencaDeTempo;
+                    somaErro += ki_MI*erro_MI*diferencaDeTempo;
+                }
+                sinalDeControle_MI = acaoP_MI + acaoI_MI;
+            }
+        }
+        else if(tipoControle_MI == 3) //PID kd e ki
+        {
+            acaoP_MI = erro_MI*kp_MI;
+            acaoD_MI = kd*(erro_MI-erroAnterior_MI)/diferencaDeTempo;
+            if(filtroDerivativo_MI)
+            {
+                acaoD_MI = acaoD_MI/(1 + gama_MI*acaoD_MI);
+            }
+            if(antiWindup_MI && sinalDeControle_MI != tensaoSaida)
+            {
+                difSaturacao_MI = (sinalDeControle_MI - tensaoSaida)/tauAW_MI;   
+                acaoI_MI = somaErro_MI + (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo ;
+                sinalDeControle_MI = acaoP_MI + acaoI_MI;
+                somaErro_MI += (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo;
+            }
+            else 
+            {
+                if(!integracaoCondicional_MI || sinalDeControle_MI == tensaoSaida)
+                {   
+                    acaoI_MI = somaErro_MI + ki_MI*erro_MI*diferencaDeTempo;
+                    somaErro += ki_MI*erro_MI*diferencaDeTempo;
+                }
+                sinalDeControle_MI = acaoP_MI + acaoI_MI;
+            }
+        }
+        else if(tipoControle_MI == 4) //PI-D kd e ki
+        {
+            acaoP_MI = erro_MI*kp_MI;
+            acaoD_MI = kd*(nivelTanqueTrava-PVAnterior_MI)/diferencaDeTempo;
+            if(filtroDerivativo_MI)
+            {
+                acaoD_MI = acaoD_MI/(1 + gama_MI*acaoD_MI);
+            }
+            if(antiWindup_MI && sinalDeControle_MI != tensaoSaida)
+            {
+                difSaturacao_MI = (sinalDeControle_MI - tensaoSaida)/tauAW_MI;   
+                acaoI_MI = somaErro_MI + (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo ;
+                sinalDeControle_MI = acaoP_MI + acaoI_MI;
+                somaErro_MI += (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo;
+            }
+            else 
+            {
+                if(!integracaoCondicional_MI || sinalDeControle_MI == tensaoSaida)
+                {   
+                    acaoI_MI = somaErro_MI + ki_MI*erro_MI*diferencaDeTempo;
+                    somaErro += ki_MI*erro_MI*diferencaDeTempo;
+                }
+                sinalDeControle_MI = acaoP_MI + acaoI_MI;
+            }
+        }
+        PVAnterior_MI = nivelTanqueTrava;
+    }
+    
+    void configurarSimulacao()
+    {
+        //PV += (0.2*tensaoSaida - PV*0.01);
+        nivelTanqueTrava += (0.2*tensaoSaida - nivelTanqueTrava*0.01);
+        PV += (0.3*nivelTanqueTrava - PV*0.01);
+    }
+    
+    
+    void calcularAmplitudeAtual(double tempoEmS, Tempo tempoClasse)
+    {
+        //double diferencaDeTempo = tempoEmS - tempoAnterior;
+        double diferencaDeTempo = 0.1 ;                 //Tempo de amostra fixa
+        
+        calculoMalhaAberta(tempoEmS, tempoClasse);
+
+        if( isMalhaFechada())
+        {
+            switch(tipoSistemaControle)
+            {   
+                case 0:
+                {
+                    calculoMalhaFechada(diferencaDeTempo);
+                    break;
+                }
+                case 1:
+                {
+                    calculoMalhaFechada(diferencaDeTempo);
+                    calcularIndicadoresDeSegundaOrdem(tempoEmS, diferencaDeTempo);
+                    break;
+                }
+
+                case 2:
+                {
+                    calculoMalhaFechada(diferencaDeTempo);
+                    calculoCascata(diferencaDeTempo);
+                    calcularIndicadoresDeSegundaOrdem(tempoEmS, diferencaDeTempo);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            setSetPoint(0.0);
+        }
+
+        tensaoSaida = amplitude;
+        setarTravas();
+                
+        configurarSimulacao();
     }
     
     void overshootMin(double tempoEmS)
@@ -940,13 +1130,6 @@ public class SinalSaida {
     }
 
     /**
-     * @param segundaOrdem the segundaOrdem to set
-     */
-    public void setSegundaOrdem(boolean segundaOrdem) {
-        this.segundaOrdem = segundaOrdem;
-    }
-
-    /**
      * @param nivelTanqueTrava the nivelTanqueTrava to set
      */
     public void setNivelTanqueTrava(double nivelTanqueTrava) {
@@ -1049,6 +1232,90 @@ public class SinalSaida {
      */
     public int getTipoOvershoot() {
         return tipoOvershoot;
+    }
+
+    /**
+     * @param antiWindup_MI the antiWindup_MI to set
+     */
+    public void setAntiWindup_MI(boolean antiWindup_MI) {
+        this.antiWindup_MI = antiWindup_MI;
+    }
+
+    /**
+     * @param tauAW_MI the tauAW_MI to set
+     */
+    public void setTauAW_MI(double tauAW_MI) {
+        this.tauAW_MI = tauAW_MI;
+    }
+
+    /**
+     * @param integracaoCondicional_MI the integracaoCondicional_MI to set
+     */
+    public void setIntegracaoCondicional_MI(boolean integracaoCondicional_MI) {
+        this.integracaoCondicional_MI = integracaoCondicional_MI;
+    }
+
+    /**
+     * @param gama_MI the gama_MI to set
+     */
+    public void setGama_MI(double gama_MI) {
+        this.gama_MI = gama_MI;
+    }
+
+    /**
+     * @param filtroDerivativo_MI the filtroDerivativo_MI to set
+     */
+    public void setFiltroDerivativo_MI(boolean filtroDerivativo_MI) {
+        this.filtroDerivativo_MI = filtroDerivativo_MI;
+    }
+
+    /**
+     * @param kp_MI the kp_MI to set
+     */
+    public void setKp_MI(double kp_MI) {
+        this.kp_MI = kp_MI;
+    }
+
+    /**
+     * @param kd_MI the kd_MI to set
+     */
+    public void setKd_MI(double kd_MI) {
+        this.kd_MI = kd_MI;
+    }
+
+    /**
+     * @param ki_MI the ki_MI to set
+     */
+    public void setKi_MI(double ki_MI) {
+        this.ki_MI = ki_MI;
+    }
+
+    /**
+     * @param td_MI the td_MI to set
+     */
+    public void setTd_MI(double td_MI) {
+        this.td_MI = td_MI;
+    }
+
+    /**
+     * @param ti_MI the ti_MI to set
+     */
+    public void setTi_MI(double ti_MI) {
+        this.ti_MI = ti_MI;
+    }
+
+    /**
+     * @param tipoControle_MI the tipoControle_MI to set
+     */
+    public void setTipoControle_MI(int tipoControle_MI) {
+        this.tipoControle_MI = tipoControle_MI;
+    }
+
+    /**
+     * @param tipoSistemaControle the tipoSistemaControle to set
+     */
+    public void setTipoSistemaControle(int tipoSistemaControle) {
+        this.tipoSistemaControle = tipoSistemaControle;
     }
 
 }

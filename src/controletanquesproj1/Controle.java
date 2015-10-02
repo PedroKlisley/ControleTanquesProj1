@@ -93,7 +93,7 @@ public class Controle {
                 break;
             }
         }
-        sinalSaida.setSegundaOrdem(getTanqueSelecionado()==2);
+        //sinalSaida.setSegundaOrdem(getTanqueSelecionado()==2);
         sinalSaida.setNivelTanqueTrava(sinaisEntrada[canalTanque1].getPV());
         
         sinalSaida.calcularAmplitudeAtual(tempo, tempoClasse);
