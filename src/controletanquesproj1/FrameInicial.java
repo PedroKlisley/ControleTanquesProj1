@@ -98,7 +98,8 @@ public class FrameInicial extends javax.swing.JFrame {
         
         jCBoxTanqueSelected.addItem(1);
         jCBoxTanqueSelected.addItem(2);
-        jCBoxTanqueSelected.setSelectedItem(2);
+        jCBoxTanqueSelected.addItem(3);
+        jCBoxTanqueSelected.setSelectedItem(3);
         //System.out.println("Thread Grafico = " + Thread.currentThread().getId());
     }
 
@@ -335,7 +336,7 @@ public class FrameInicial extends javax.swing.JFrame {
         jLabel_SetPoint = new javax.swing.JLabel();
         jSpinner_0a30 = new javax.swing.JSpinner();
         jSpinner_Periodo = new javax.swing.JSpinner();
-        jPanel9 = new javax.swing.JPanel();
+        jPanelControle = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabelKp = new javax.swing.JLabel();
         jSpinnerKp = new javax.swing.JSpinner();
@@ -366,6 +367,31 @@ public class FrameInicial extends javax.swing.JFrame {
         jCBIntCondicional = new javax.swing.JCheckBox();
         jCBAntiWindup = new javax.swing.JCheckBox();
         jCBFiltroDerivativo = new javax.swing.JCheckBox();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jSpinnerKp_MI = new javax.swing.JSpinner();
+        jLabel20 = new javax.swing.JLabel();
+        jSpinnerKi_MI = new javax.swing.JSpinner();
+        jLabel24 = new javax.swing.JLabel();
+        jSpinnerKd_MI = new javax.swing.JSpinner();
+        jLabel25 = new javax.swing.JLabel();
+        jSpinnerTaw_MI = new javax.swing.JSpinner();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jSpinnerTi_MI = new javax.swing.JSpinner();
+        jSpinnerTd_MI = new javax.swing.JSpinner();
+        jLabel28 = new javax.swing.JLabel();
+        jSpinnerGama_MI = new javax.swing.JSpinner();
+        jPanel19 = new javax.swing.JPanel();
+        jPanel20 = new javax.swing.JPanel();
+        jLabel29 = new javax.swing.JLabel();
+        jCBAntiWindup_MI = new javax.swing.JCheckBox();
+        jCBIntCondicional_MI = new javax.swing.JCheckBox();
+        jCBFiltroDerivativo_MI = new javax.swing.JCheckBox();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        jCBoxTipoControle_MI = new javax.swing.JComboBox();
         jPanel8 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
@@ -604,7 +630,7 @@ public class FrameInicial extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTxtPorta)
-                    .addComponent(jTxtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                    .addComponent(jTxtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
                 .addGap(65, 65, 65))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(68, 68, 68)
@@ -652,6 +678,12 @@ public class FrameInicial extends javax.swing.JFrame {
         });
 
         jLabelControleTanque.setText("Controlar Tanque ");
+
+        jCBoxTanqueSelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBoxTanqueSelectedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -827,23 +859,23 @@ public class FrameInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_4v)
                     .addComponent(jSpinner_4v, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_SetPoint)
                     .addComponent(jSpinner_0a30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Am_mi)
                     .addComponent(jSpinner_Am_mi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Du_ma)
                     .addComponent(jSpinner_Du_ma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Du_mi)
                     .addComponent(jSpinner_Du_mi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Offset)
                     .addComponent(jSpinner_Offset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -851,7 +883,7 @@ public class FrameInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Periodo)
                     .addComponent(jSpinner_Periodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -866,7 +898,7 @@ public class FrameInicial extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 68, Short.MAX_VALUE)))
+                        .addGap(0, 115, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -877,8 +909,8 @@ public class FrameInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane.addTab("Sinal", jPanel3);
@@ -953,7 +985,7 @@ public class FrameInicial extends javax.swing.JFrame {
                                     .addComponent(jLabelKi))
                                 .addGap(6, 6, 6))
                             .addGroup(jPanel10Layout.createSequentialGroup()
-                                .addComponent(jLabelKd, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                                .addComponent(jLabelKd, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSpinnerKd)
@@ -1152,21 +1184,21 @@ public class FrameInicial extends javax.swing.JFrame {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelControleLayout = new javax.swing.GroupLayout(jPanelControle);
+        jPanelControle.setLayout(jPanelControleLayout);
+        jPanelControleLayout.setHorizontalGroup(
+            jPanelControleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelControleLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanelControleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
+        jPanelControleLayout.setVerticalGroup(
+            jPanelControleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelControleLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1176,7 +1208,212 @@ public class FrameInicial extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane.addTab("Controle", jPanel9);
+        jTabbedPane.addTab("Controle", jPanelControle);
+
+        jLabel15.setText("Kp");
+
+        jSpinnerKp_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+
+        jLabel20.setText("Ki");
+
+        jSpinnerKi_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+
+        jLabel24.setText("Kd");
+
+        jSpinnerKd_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+
+        jLabel25.setText("tau_aw");
+
+        jSpinnerTaw_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+        jSpinnerTaw_MI.setEnabled(false);
+
+        jLabel26.setText("tau_i");
+
+        jLabel27.setText("tau_d");
+
+        jSpinnerTi_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+
+        jSpinnerTd_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+
+        jLabel28.setText("Gama");
+
+        jSpinnerGama_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+        jSpinnerGama_MI.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel20))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSpinnerKp_MI, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                            .addComponent(jSpinnerKi_MI)))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addComponent(jLabel24)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSpinnerKd_MI)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel26)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel28))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSpinnerTaw_MI, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                    .addComponent(jSpinnerTi_MI)
+                    .addComponent(jSpinnerTd_MI)
+                    .addComponent(jSpinnerGama_MI, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jSpinnerKp_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25)
+                    .addComponent(jSpinnerTaw_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(jSpinnerKi_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26)
+                    .addComponent(jSpinnerTi_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jSpinnerKd_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27)
+                    .addComponent(jSpinnerTd_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel28)
+                    .addComponent(jSpinnerGama_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel29.setText("Filtros");
+
+        jCBAntiWindup_MI.setText("Anti Windup");
+        jCBAntiWindup_MI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBAntiWindup_MIActionPerformed(evt);
+            }
+        });
+
+        jCBIntCondicional_MI.setText("Integração Cond.");
+        jCBIntCondicional_MI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBIntCondicional_MIActionPerformed(evt);
+            }
+        });
+
+        jCBFiltroDerivativo_MI.setText("Derivativo");
+        jCBFiltroDerivativo_MI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBFiltroDerivativo_MIActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCBFiltroDerivativo_MI)
+                    .addComponent(jLabel29)
+                    .addComponent(jCBAntiWindup_MI)
+                    .addComponent(jCBIntCondicional_MI))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel20Layout.setVerticalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel29)
+                .addGap(18, 18, 18)
+                .addComponent(jCBAntiWindup_MI)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCBIntCondicional_MI)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCBFiltroDerivativo_MI)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        jLabel30.setText("Tipo de Controle");
+
+        jCBoxTipoControle_MI.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "P", "PD", "PI", "PID", "PI-D" }));
+
+        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
+        jPanel21.setLayout(jPanel21Layout);
+        jPanel21Layout.setHorizontalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel30)
+                    .addComponent(jCBoxTipoControle_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(11, Short.MAX_VALUE))
+        );
+        jPanel21Layout.setVerticalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCBoxTipoControle_MI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 199, Short.MAX_VALUE))
+        );
+
+        jTabbedPane.addTab("MalhaInterna", jPanel9);
 
         jLabel16.setText("Escolha quais curvas plotar no gráfico:");
 
@@ -1334,7 +1571,7 @@ public class FrameInicial extends javax.swing.JFrame {
                     .addComponent(jLabel11)
                     .addComponent(jLabel13)
                     .addComponent(jLabel18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
                 .addGroup(jPanel2OrdemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelOvershoot, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelTPico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1392,7 +1629,7 @@ public class FrameInicial extends javax.swing.JFrame {
                         .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2Ordem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1418,11 +1655,11 @@ public class FrameInicial extends javax.swing.JFrame {
         jPanelGrafico.setLayout(jPanelGraficoLayout);
         jPanelGraficoLayout.setHorizontalGroup(
             jPanelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 860, Short.MAX_VALUE)
+            .addGap(0, 865, Short.MAX_VALUE)
         );
         jPanelGraficoLayout.setVerticalGroup(
             jPanelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 657, Short.MAX_VALUE)
         );
 
         jButton_Enviar.setText("Enviar");
@@ -1480,12 +1717,12 @@ public class FrameInicial extends javax.swing.JFrame {
                     .addComponent(jPanelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addContainerGap())))
         );
 
-        jTabbedPane.getAccessibleContext().setAccessibleName("tab1");
+        jTabbedPane.getAccessibleContext().setAccessibleName("MalhaInterna");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1570,7 +1807,8 @@ public class FrameInicial extends javax.swing.JFrame {
                 jPanel2Ordem.setEnabled(false);
             }
 
-            controle.setTanqueSelecionado((int)jCBoxTanqueSelected.getSelectedItem());
+            //controle.setTanqueSelecionado((int)jCBoxTanqueSelected.getSelectedItem());
+            controle.getSinalSaida().setTipoSistemaControle((int)jCBoxTanqueSelected.getSelectedIndex());
             controle.setCanalTanque1((int)jCBoxTanque1.getSelectedItem());
             controle.setCanalTanque2((int)jCBoxTanque2.getSelectedItem());
             
@@ -1586,6 +1824,7 @@ public class FrameInicial extends javax.swing.JFrame {
             {
                 jLabelOvershootUnit.setText("cm");
             }
+            
             
             
             System.out.println("Mudou Tanque Controlado para: " + controle.getTanqueSelecionado());
@@ -1604,6 +1843,22 @@ public class FrameInicial extends javax.swing.JFrame {
             controle.getSinalSaida().setIntegracaoCondicional(jCBIntCondicional.isSelected());
             controle.getSinalSaida().setFiltroDerivativo(jCBFiltroDerivativo.isSelected());
             controle.getSinalSaida().setTauAW((double)jSpinner_Taw.getValue());
+            
+            
+            if(jCBoxTanqueSelected.getSelectedIndex()==2)
+            {
+               controle.getSinalSaida().setKp_MI((double)jSpinnerKp_MI.getValue());
+               controle.getSinalSaida().setKd_MI((double)jSpinnerKd_MI.getValue());
+               controle.getSinalSaida().setKi_MI((double)jSpinnerKi_MI.getValue());
+               controle.getSinalSaida().setTd_MI((double)jSpinnerTd_MI.getValue());
+               controle.getSinalSaida().setTi_MI((double)jSpinnerTi_MI.getValue());
+               controle.getSinalSaida().setTipoControle_MI(jCBoxTipoControle_MI.getSelectedIndex());
+               controle.getSinalSaida().setAntiWindup_MI(jCBAntiWindup_MI.isSelected());
+               controle.getSinalSaida().setIntegracaoCondicional_MI(jCBIntCondicional_MI.isSelected());
+               controle.getSinalSaida().setFiltroDerivativo_MI(jCBFiltroDerivativo_MI.isSelected());
+               controle.getSinalSaida().setTauAW_MI((double)jSpinnerTaw_MI.getValue());   
+            }
+            
             //ArrayList itensDeGrafico = new ArrayList();
             if(jRadioButtonMF.isSelected())
             {
@@ -1853,6 +2108,8 @@ public class FrameInicial extends javax.swing.JFrame {
 
             jLabelControleTanque.setEnabled(true);
             jCBoxTanqueSelected.setEnabled(true);
+            
+            jTabbedPane.setEnabledAt(2, true);
         }
     }//GEN-LAST:event_jRadioButtonMFActionPerformed
 
@@ -1867,6 +2124,8 @@ public class FrameInicial extends javax.swing.JFrame {
 
             jLabelControleTanque.setEnabled(false);
             jCBoxTanqueSelected.setEnabled(false);
+            
+            jTabbedPane.setEnabledAt(2, false);
         }
     }//GEN-LAST:event_jRadioButtonMAActionPerformed
 
@@ -2139,8 +2398,13 @@ public class FrameInicial extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCBPlotAcaoDStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /***************USAR NA PLANTA*************
+    private void simularConexao()
+    {
+        System.out.println("Conectou!");
+        setConectado(true);
+    }
+    private void conectarAPlanta()
+    {
         try 
         {
             quanserClient = new QuanserClient(jTxtIP.getText(), Integer.parseInt(jTxtPorta.getText()));
@@ -2149,12 +2413,13 @@ public class FrameInicial extends javax.swing.JFrame {
         } 
         catch (QuanserClientException ex) {
             ex.printStackTrace();
-        }//*/
+        }
+    }
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //conectarAPlanta();
+        simularConexao();
         
-        /********SIMULACÃO**********/
-        System.out.println("Conectou!");
-        setConectado(true);
-        //*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     void conexaoModificada(boolean ativou, int canal){
@@ -2262,6 +2527,39 @@ public class FrameInicial extends javax.swing.JFrame {
         jSpinnerGama.setEnabled(jCBFiltroDerivativo.isSelected());
     }//GEN-LAST:event_jCBFiltroDerivativoActionPerformed
 
+    private void jCBAntiWindup_MIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBAntiWindup_MIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBAntiWindup_MIActionPerformed
+
+    private void jCBIntCondicional_MIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBIntCondicional_MIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBIntCondicional_MIActionPerformed
+
+    private void jCBFiltroDerivativo_MIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBFiltroDerivativo_MIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBFiltroDerivativo_MIActionPerformed
+
+    private void jCBoxTanqueSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBoxTanqueSelectedActionPerformed
+        switch(jCBoxTanqueSelected.getSelectedIndex())
+        {
+            case 0:
+            {
+                jTabbedPane.setEnabledAt(3, false);
+                break;
+            }
+            case 1:
+            {
+                jTabbedPane.setEnabledAt(3, false);
+                break;
+            }
+            case 2:
+            {
+                jTabbedPane.setEnabledAt(3, true);
+                break;
+            }
+        }
+    }//GEN-LAST:event_jCBoxTanqueSelectedActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2304,8 +2602,11 @@ public class FrameInicial extends javax.swing.JFrame {
     private javax.swing.JButton jButton_Enviar;
     private javax.swing.JButton jButton_Parar;
     private javax.swing.JCheckBox jCBAntiWindup;
+    private javax.swing.JCheckBox jCBAntiWindup_MI;
     private javax.swing.JCheckBox jCBFiltroDerivativo;
+    private javax.swing.JCheckBox jCBFiltroDerivativo_MI;
     private javax.swing.JCheckBox jCBIntCondicional;
+    private javax.swing.JCheckBox jCBIntCondicional_MI;
     private javax.swing.JComboBox jCBOvershoot;
     private javax.swing.JCheckBox jCBPlotAcaoD;
     private javax.swing.JCheckBox jCBPlotAcaoI;
@@ -2331,21 +2632,31 @@ public class FrameInicial extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBoxTanque2;
     private javax.swing.JComboBox jCBoxTanqueSelected;
     private javax.swing.JComboBox jCBoxTipoControle;
+    private javax.swing.JComboBox jCBoxTipoControle_MI;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2380,8 +2691,12 @@ public class FrameInicial extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel2Ordem;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2390,6 +2705,7 @@ public class FrameInicial extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelControle;
     private javax.swing.JPanel jPanelGrafico;
     private javax.swing.JRadioButton jRBAleatorio;
     private javax.swing.JRadioButton jRBDegrau;
@@ -2399,11 +2715,18 @@ public class FrameInicial extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButtonMA;
     private javax.swing.JRadioButton jRadioButtonMF;
     private javax.swing.JSpinner jSpinnerGama;
+    private javax.swing.JSpinner jSpinnerGama_MI;
     private javax.swing.JSpinner jSpinnerKd;
+    private javax.swing.JSpinner jSpinnerKd_MI;
     private javax.swing.JSpinner jSpinnerKi;
+    private javax.swing.JSpinner jSpinnerKi_MI;
     private javax.swing.JSpinner jSpinnerKp;
+    private javax.swing.JSpinner jSpinnerKp_MI;
+    private javax.swing.JSpinner jSpinnerTaw_MI;
     private javax.swing.JSpinner jSpinnerTd;
+    private javax.swing.JSpinner jSpinnerTd_MI;
     private javax.swing.JSpinner jSpinnerTi;
+    private javax.swing.JSpinner jSpinnerTi_MI;
     private javax.swing.JSpinner jSpinner_0a30;
     private javax.swing.JSpinner jSpinner_4v;
     private javax.swing.JSpinner jSpinner_Am_mi;
