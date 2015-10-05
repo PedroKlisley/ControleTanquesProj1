@@ -74,30 +74,9 @@ public class Controle {
     }
     
     void calcularSinal(double tempo){
-        /*for(int i = 0; i < getCanaisSaida().size(); i++)
-        {
-            int canalSaida = (int) getCanaisSaida().get(i);
-            getSinais()[canalSaida].calcularAmplitudeAtual(tempo);
-        }*/
-        
-        switch(getTanqueSelecionado())
-        {
-            case 1:
-            {
-                sinalSaida.setPV(sinaisEntrada[canalTanque1].getPV());
-                break;
-            }
-            case 2:
-            {
-                sinalSaida.setPV(sinaisEntrada[canalTanque2].getPV());
-                break;
-            }
-        }
-        //sinalSaida.setSegundaOrdem(getTanqueSelecionado()==2);
-        sinalSaida.setNivelTanqueTrava(sinaisEntrada[canalTanque1].getPV());
-        
+        sinalSaida.setPV_T1(sinaisEntrada[canalTanque1].getPV());
+        sinalSaida.setPV_T2(sinaisEntrada[canalTanque2].getPV());
         sinalSaida.calcularAmplitudeAtual(tempo, tempoClasse);
-        
     }
     
     void enviarSinal()

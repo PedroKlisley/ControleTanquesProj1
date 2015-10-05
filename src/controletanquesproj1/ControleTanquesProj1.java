@@ -42,9 +42,12 @@ public class ControleTanquesProj1 {
     static void configurarSimulacao(Controle controle, long tGeralStart)
     {
         /*****LEITURA DO SINAL*****/
-        controle.setTanqueSelecionado(2);
-        controle.getSinaisEntrada()[1].setPV(controle.getSinalSaida().getPV());
-
+        //controle.setTanqueSelecionado(2);
+        controle.getSinaisEntrada()[1].setPV(controle.getSinalSaida().getPV_T2());
+        controle.getSinaisEntrada()[0].setPV(controle.getSinalSaida().getPV_T1());
+        //controle.getSinaisEntrada()[0].setPV(10);
+        //controle.getSinaisEntrada()[1].setPV(5);
+        
         /*****CÁLCULO DO SINAL*****/
         controle.calcularSinal((System.nanoTime() - tGeralStart)/1000000000.0);
     }
@@ -110,16 +113,6 @@ public class ControleTanquesProj1 {
         FrameInicial frame = new FrameInicial();
         frame.SetControle(controle);
         
-        /*try {    
-            UIManager.setLookAndFeel("Windows");
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ControleTanquesProj1.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ControleTanquesProj1.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ControleTanquesProj1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        SwingUtilities.updateComponentTreeUI(frame); */
         frame.setVisible(true);
         RefineryUtilities.centerFrameOnScreen(frame);
 

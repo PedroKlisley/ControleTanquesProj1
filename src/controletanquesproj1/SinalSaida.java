@@ -19,7 +19,7 @@ public class SinalSaida {
     private double periodo;
     private double offset;
     private boolean malhaFechada;
-    private int tipo;
+    private int tipoOnda;
     
     /*****Entradas Sinal Aleatório*****/
     private double amplitudeMin;
@@ -27,80 +27,79 @@ public class SinalSaida {
     private double duracaoMin;
     
     /*****Entradas Malha Fechada*****/
-    private int tipoSistemaControle;
-    private double PV;
-    private double nivelTanqueTrava;
-    private double setPoint;
+    private int tipoControle;
+    private double PV_T2;
+    private double PV_T1;
+    private double setPoint_T1;
+    private double setPoint_T2;
     
     /*****Saídas Malha Genérica*****/
-    private double amplitude;
+    private double amplitudeSinal;
     private double tensaoSaida;
     
     /*****Entradas Controle*****/
-    private double kp;
-    private double kd;
-    private double ki;
-    private double td;
-    private double ti;
-    //private boolean segundaOrdem;
-    private int tipoControle;
+    private double kp_T2;
+    private double kd_T2;
+    private double ki_T2;
+    private double td_T2;
+    private double ti_T2;
+    private boolean segundaOrdem;
+    private int controlador_T2;
     
-    /*****Entradas Controle_MI*****/
-    private double kp_MI;
-    private double kd_MI;
-    private double ki_MI;
-    private double td_MI;
-    private double ti_MI;
-    private int tipoControle_MI;
+    /*****Entradas Controle_T1*****/
+    private double kp_T1;
+    private double kd_T1;
+    private double ki_T1;
+    private double td_T1;
+    private double ti_T1;
+    private int controlador_T1;
     
     /*****Saídas Controle*****/    
-    private double sinalDeControle;
-    private double acaoP;
-    private double acaoI;
-    private double acaoD;
+    private double sinalDeControle_T2;
+    private double acaoP_T2;
+    private double acaoI_T2;
+    private double acaoD_T2;
     
-    /*****Saídas Controle_MI*****/    
-    private double sinalDeControle_MI;
-    private double acaoP_MI;
-    private double acaoI_MI;
-    private double acaoD_MI;
+    /*****Saídas Controle_T1*****/    
+    private double sinalDeControle_T1;
+    private double acaoP_T1;
+    private double acaoI_T1;
+    private double acaoD_T1;
     
     
     /*****Entradas Filtro*****/
-    private boolean antiWindup;
-    private double tauAW;
-    private boolean integracaoCondicional;
-    private double gama;//Constante Filtro Derivativo
-    private boolean filtroDerivativo;
+    private boolean antiWindup_T2;
+    private double tauAW_T2;
+    private boolean integracaoCondicional_T2;
+    private double gama_T2;//Constante Filtro Derivativo
+    private boolean filtroDerivativo_T2;
     
-    /*****Entradas Filtro_MI*****/
-    private boolean antiWindup_MI;
-    private double tauAW_MI;
-    private boolean integracaoCondicional_MI;
-    private double gama_MI;//Constante Filtro Derivativo
-    private boolean filtroDerivativo_MI;
+    /*****Entradas Filtro_T1*****/
+    private boolean antiWindup_T1;
+    private double tauAW_T1;
+    private boolean integracaoCondicional_T1;
+    private double gama_T1;//Constante Filtro Derivativo
+    private boolean filtroDerivativo_T1;
     
     /*****Variáveis de Estado Controle*****/
-    private double erro;  
-    private double erroAnterior;
-    private double somaErro;
-    private double difSaturacao;
-    private double PVAnterior;
+    private double erro_T2;  
+    private double erroAnterior_T2;
+    private double somaErro_T2;
+    private double difSaturacao_T2;
+    private double PVAnterior_T2;
     private double tempoAnterior; //Usado para calcular passo
     
-    /*****Variáveis de Estado Controle_MI*****/
-    private double erro_MI;  
-    private double erroAnterior_MI;
-    private double somaErro_MI;
-    private double difSaturacao_MI;
-    private double PVAnterior_MI;
-    private double tempoAnterior_MI; //Usado para calcular passo
-    
+    /*****Variáveis de Estado Controle_T1*****/
+    private double erro_T1;  
+    private double erroAnterior_T1;
+    private double somaErro_T1;
+    private double difSaturacao_T1;
+    private double PVAnterior_T1;
+
     /*****Entradas Segunda Ordem*****/
     private int tipoOvershoot; //0 - Absoluto; 1 - Percentual
     private int tipoTempoSubida; //0: 0-100%; 1: 5 - 95%; 2: 10 - 90%
     private int tipoTempoAcomodacao; //0: 2%; 1: 5%; 2: 7%; 3: 10%
-    private double PVD20;
     
     /*****Saídas Segunda Ordem*****/
     private double tempoSubida;
@@ -117,97 +116,137 @@ public class SinalSaida {
     private boolean calculouInicioTempoSubida;
     private double mudancaSP;
     private boolean mudouSinal;
-    private double SPAnterior;
-    private double SPAtual;
+    private double SPAnterior_T2;
+    private double SPAtual_T2;
     private double derivadaPV;
     private double overshootSat;
     
     public SinalSaida()
     {
-        
-        PV = 0.0;
-        amplitude = 0.0;
+        /*****Entradas Sinal Genérico*****/
         amplitudeMax = 0.0;
-        amplitudeMin = 0.0;
         periodo = 0.0;
-        
-        duracaoMax = 1.0;
-        duracaoMin = 0.0;
-        tipo = 0;
         offset = 0.0;
-        
         malhaFechada = false;
-        tensaoSaida = 0.0;
-        setPoint = 0.0;
+        tipoOnda = 0;
+
+        /*****Entradas Sinal Aleatório*****/
+        amplitudeMin = 0.0;
+        duracaoMax = 0.0;
+        duracaoMin = 0.0;
+
+        /*****Entradas Malha Fechada*****/
         tipoControle = 0;
-        erro = 0.0;
-        erroAnterior = 0.0;
-        somaErro = 0.0;
-        tempoAnterior = 0.0;
-        PVAnterior = 0.0;
-        kp = 2.0;
-        kd = 0.005;
-        ki = 0.5;
-        td = 0.0;
-        ti = 0.0;
-        antiWindup = false;
-        tauAW = 1.0;
-        integracaoCondicional = false;
-        difSaturacao = 0.0;
-        sinalDeControle = 0.0;
-        acaoP = 0.0;
-        acaoI = 0.0;
-        acaoD = 0.0;
-        SPAnterior = 0.0;
-        SPAtual = 0.0;
+        PV_T2 = 0.0;
+        PV_T1 = 0.0;
+        setPoint_T1 = 0.0;
+        setPoint_T2 = 0.0;
+        
+
+        /*****Saídas Malha Genérica*****/
+        amplitudeSinal = 0.0;
+        tensaoSaida = 0.0;
+
+        /*****Entradas Controle*****/
+        kp_T2 = 0.0;
+        kd_T2 = 0.0;
+        ki_T2 = 0.0;
+        td_T2 = 0.0;
+        ti_T2 = 0.0;
+        segundaOrdem = false;
+        controlador_T2 = 0;
+
+        /*****Entradas Controle_T1*****/
+        kp_T1 = 0.0;
+        kd_T1 = 0.0;
+        ki_T1 = 0.0;
+        td_T1 = 0.0;
+        ti_T1 = 0.0;
+        controlador_T1 = 0;
+
+        /*****Saídas Controle*****/    
+        sinalDeControle_T2 = 0.0;
+        acaoP_T2 = 0.0;
+        acaoI_T2 = 0.0;
+        acaoD_T2 = 0.0;
+
+        /*****Saídas Controle_T1*****/    
+        sinalDeControle_T1 = 0.0;
+        acaoP_T1 = 0.0;
+        acaoI_T1 = 0.0;
+        acaoD_T1 = 0.0;
+
+
+        /*****Entradas Filtro*****/
+        antiWindup_T2 = false;
+        tauAW_T2 = 0.0;
+        integracaoCondicional_T2 = false;
+        gama_T2 = 0.0;//Constante Filtro Derivativo
+        filtroDerivativo_T2 = false;
+
+        /*****Entradas Filtro_T1*****/
+        antiWindup_T1 = false;
+        tauAW_T1 = 0.0;
+        integracaoCondicional_T1 = false;
+        gama_T1 = 0.0;//Constante Filtro Derivativo
+        filtroDerivativo_T1 = false;
+
+        /*****Variáveis de Estado Controle*****/
+        erro_T2 = 0.0;  
+        erroAnterior_T2 = 0.0;
+        somaErro_T2 = 0.0;
+        difSaturacao_T2 = 0.0;
+        PVAnterior_T2 = 0.0;
+        tempoAnterior = 0.0; //Usado para calcular passo
+
+        /*****Variáveis de Estado Controle_T1*****/
+        erro_T1 = 0.0;  
+        erroAnterior_T1 = 0.0;
+        somaErro_T1 = 0.0;
+        difSaturacao_T1 = 0.0;
+        PVAnterior_T1 = 0.0;
+
+        /*****Entradas Segunda Ordem*****/
+        tipoOvershoot = 1; //0 - Absoluto; 1 - Percentual
+        tipoTempoSubida = 0; //0: 0-100%; 1: 5 - 95%; 2: 10 - 90%
+        tipoTempoAcomodacao = 1; //0: 2%; 1: 5%; 2: 7%; 3: 10%
+
+        /*****Saídas Segunda Ordem*****/
         tempoSubida = 0.0;
         overshoot = 0.0;
         tempoPico = 0.0;
         tempoAcomodacao = 0.0;
-        
-        kp_MI = 0.0;
-        kd_MI = 0.0;
-        ki_MI = 0.0;
-        td_MI = 0.0;
-        ti_MI = 0.0;
+        calculouTempoSubida = false;
+        calculouOvershoot = false;
+        pareceAcomodado = false;
 
-        /*****Saídas Controle_MI*****/    
-        sinalDeControle_MI = 0.0;
-        acaoP_MI = 0.0;
-        acaoI_MI = 0.0;
-        acaoD_MI = 0.0;
-
-        /*****Entradas Filtro_MI*****/
-        antiWindup_MI = false;
-        tauAW_MI = 0.0;
-        integracaoCondicional_MI = false;
-        gama_MI = 0.0;//Constante Filtro Derivativo
-        filtroDerivativo_MI = false;
-
-
-        /*****Variáveis de Estado Controle_MI*****/
-        erro_MI = 0.0;  
-        erroAnterior_MI = 0.0;
-        somaErro_MI = 0.0;
-        difSaturacao_MI = 0.0;
-        PVAnterior_MI = 0.0;
+        /*****Variáveis de Estado Segunda Ordem*****/
+        tempoInicioSinalNovo = 0.0;
+        tempoInicioSubida = 0.0;
+        calculouInicioTempoSubida = false;
+        mudancaSP = 0.0;
+        mudouSinal = false;
+        SPAnterior_T2 = 0.0;
+        SPAtual_T2 = 0.0;
+        derivadaPV = 0.0;
+        overshootSat = 0.0;
     }
 
     void calculoMalhaAberta(double tempoEmS, Tempo tempoClasse)
     {
         tempoAnterior = tempoEmS;
-        switch(tipo)
+        switch(tipoOnda)
         {
             case 0:
             //Degrau
             {
-                amplitude = amplitudeMax;
+                amplitudeSinal = amplitudeMax;
                 break;
             }
             case 1:
             //Senoidal
             {
-                amplitude = amplitudeMax*Math.sin(2*Math.PI*tempoEmS/periodo);
+                amplitudeSinal = amplitudeMax*Math.sin(2*Math.PI*tempoEmS/periodo);
                 break;
             }
             case 2:
@@ -215,18 +254,18 @@ public class SinalSaida {
             {
                 if(tempoEmS%periodo > periodo/2)
                 {
-                    amplitude = amplitudeMax;
+                    amplitudeSinal = amplitudeMax;
                 }
                 else
                 {
-                    amplitude = -amplitudeMax;
+                    amplitudeSinal = -amplitudeMax;
                 }
                 break;
             }
             case 3:
             //Dente de serra
             {
-                amplitude = 2*amplitudeMax*(tempoEmS%periodo)/periodo - amplitudeMax;
+                amplitudeSinal = 2*amplitudeMax*(tempoEmS%periodo)/periodo - amplitudeMax;
                 break;
             }
             case 4:
@@ -248,114 +287,214 @@ public class SinalSaida {
                         tempoClasse.setIniciarAleatorio(true);
                     }
                 }
-                amplitude = tempoClasse.getAmplitudeAleatorio();
+                amplitudeSinal = tempoClasse.getAmplitudeAleatorio();
                 break;
             }
         }
 
-        amplitude += offset;    
+        amplitudeSinal += offset;    
     }
     
-    void calculoMalhaFechada(double diferencaDeTempo)
-    {
-        setSetPoint(amplitude); 
-        if(setPoint != SPAtual)
-        {
-            mudouSinal = true;
-        }
-        erroAnterior = getErro();
-        erro = setPoint - PV;
+    void calculoControladorTanque1(double diferencaDeTempo)
+    { 
+        erro_T1 = getSetPoint_T1() - PV_T1;
 
-        if(getTipoControle() == 0) //P
+        if(controlador_T1 == 0) //P
         {
-            somaErro = 0.0;
-            acaoP = getErro()*getKp();
-            amplitude = getAcaoP();
+            somaErro_T1 = 0.0;
+            acaoP_T1 = erro_T1*kp_T1;
+            sinalDeControle_T1 = acaoP_T1;
         }
-        else if(getTipoControle() == 1) //PD kd
+        else if(controlador_T1 == 1) //PD kd
         {
-            somaErro = 0.0;
-            acaoP = getErro()*getKp();
-            acaoD = getKd()*(getErro()-erroAnterior)/diferencaDeTempo;
-            if(filtroDerivativo)
+            somaErro_T1 = 0.0;
+            acaoP_T1 = erro_T1*kp_T1;
+            acaoD_T1 = kd_T1*(erro_T1-erroAnterior_T1)/diferencaDeTempo;
+            if(filtroDerivativo_T1)
             {
-                acaoD = acaoD/(1 + gama*acaoD);
+                acaoD_T1 = acaoD_T1/(1 + gama_T1*acaoD_T1);
             }
-            amplitude = getAcaoP() + getAcaoI();
+            sinalDeControle_T1 = acaoP_T1 + acaoI_T1;
         }
-        else if(getTipoControle() == 2) //PI ki
+        else if(controlador_T1 == 2) //PI ki
         {
-            acaoP = getErro()*getKp();
-            if(isAntiWindup() && sinalDeControle != tensaoSaida)
+            acaoP_T1 = erro_T1*kp_T1;
+            if(antiWindup_T1 && sinalDeControle_T1 != tensaoSaida)
             {
-                difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();   
-                acaoI = somaErro + (getKi()*getErro() - kp*difSaturacao)*diferencaDeTempo ;
-                amplitude = getAcaoP() + getAcaoI();
-                somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
+                difSaturacao_T1 = (sinalDeControle_T1 - tensaoSaida)/tauAW_T1;   
+                acaoI_T1 = somaErro_T1 + (ki_T1*erro_T1 - kp_T1*difSaturacao_T1)*diferencaDeTempo ;
+                sinalDeControle_T1 = acaoP_T1 + acaoI_T1;
+                somaErro_T1 += (ki_T1*erro_T1 - kp_T1*difSaturacao_T1)*diferencaDeTempo;
             }
             else 
             {
-                if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
+                if(integracaoCondicional_T1 || sinalDeControle_T1 == getTensaoSaida())
                 {   
-                    acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
-                    somaErro += ki*getErro()*diferencaDeTempo;
+                    acaoI_T1 = somaErro_T1 + ki_T1*erro_T1*diferencaDeTempo;
+                    somaErro_T1 += ki_T1*erro_T1*diferencaDeTempo;
                 }
-                amplitude = getAcaoP() + getAcaoI();
+                sinalDeControle_T1 = acaoP_T1 + acaoI_T1;
             }
         }
-        else if(getTipoControle() == 3) //PID kd e ki
+        else if(controlador_T1 == 3) //PID kd e ki
         {
-            acaoP = getErro()*getKp();
-            acaoD = getKd()*(getErro()-erroAnterior)/diferencaDeTempo;
-            if(filtroDerivativo)
+            acaoP_T1 = erro_T1*kp_T1;
+            acaoD_T1 = kd_T1*(erro_T1-erroAnterior_T1)/diferencaDeTempo;
+            if(filtroDerivativo_T1)
             {
                 //acaoD = acaoD/(1 + gama*(acaoD/kp));
-                acaoD = acaoD/(1 + gama*(acaoD/(kp*erro)));
+                acaoD_T1 = acaoD_T1/(1 + gama_T1*(acaoD_T1/(kp_T1*erro_T1)));
             }
-            if(isAntiWindup() && sinalDeControle != tensaoSaida)
+            if(antiWindup_T1 && sinalDeControle_T1 != tensaoSaida)
             {
-                difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();   
-                acaoI = somaErro + (getKi()*getErro() - kp*difSaturacao)*diferencaDeTempo ;
-                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
-                somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
+                difSaturacao_T1 = (sinalDeControle_T1 - getTensaoSaida())/tauAW_T1;   
+                acaoI_T1 = somaErro_T1 + (ki_T1*erro_T1 - kp_T1*difSaturacao_T1)*diferencaDeTempo ;
+                 sinalDeControle_T1 = acaoP_T1 + acaoI_T1 + acaoD_T1;
+                somaErro_T1 += (ki_T1*erro_T1 - kp_T1*difSaturacao_T1)*diferencaDeTempo;
             }
             else 
             {
-                if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
+                if(integracaoCondicional_T1 || sinalDeControle_T1 == tensaoSaida)
                 {   
-                    acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
-                    somaErro += ki*getErro()*diferencaDeTempo;
+                    acaoI_T1 = somaErro_T1 + ki_T1*erro_T1*diferencaDeTempo;
+                    somaErro_T1 += ki_T1*erro_T1*diferencaDeTempo;
                 }
-                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
+                sinalDeControle_T1 = acaoP_T1 + acaoI_T1 + acaoD_T1;
             }
         }
-        else if(getTipoControle() == 4) //PI-D kd e ki
+        else if(controlador_T1 == 4) //PI-D kd e ki
         {
-            acaoP = getErro()*getKp();
-            acaoD = getKd()*(PV-PVAnterior)/diferencaDeTempo;
-            if(filtroDerivativo)
+            acaoP_T1 = erro_T1*kp_T1;
+            acaoD_T1 = kd_T1*(PV_T1-PVAnterior_T1)/diferencaDeTempo;
+            if(filtroDerivativo_T1)
             {
-                acaoD = acaoD/(1 + gama*acaoD);
+                acaoD_T1 = acaoD_T1/(1 + gama_T1*acaoD_T1);
             }
-            if(isAntiWindup() && sinalDeControle != tensaoSaida)
+            if(antiWindup_T1 && sinalDeControle_T1 != tensaoSaida)
             {
-                difSaturacao = (sinalDeControle - tensaoSaida)/getTauAW();
-                acaoI = somaErro + ( getKi()*getErro() - kp*difSaturacao )*diferencaDeTempo ;
-                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
-                somaErro += (ki*getErro() - kp*difSaturacao)*diferencaDeTempo;
+                difSaturacao_T1 = (sinalDeControle_T1 - tensaoSaida)/tauAW_T1;
+                acaoI_T1 = somaErro_T1 + ( ki_T1*erro_T1 - kp_T1*difSaturacao_T1 )*diferencaDeTempo ;
+                 sinalDeControle_T1 = acaoP_T1 + acaoI_T1 + acaoD_T1;
+                somaErro_T1 += (ki_T1*erro_T1 - kp_T1*difSaturacao_T1)*diferencaDeTempo;
             }
             else 
             {   
-                if(!isIntegracaoCondicional() || sinalDeControle == tensaoSaida)
+                if(!integracaoCondicional_T1 || sinalDeControle_T1 == tensaoSaida)
                 {   
-                    acaoI = somaErro + getKi()*getErro()*diferencaDeTempo;
-                    somaErro += ki*getErro()*diferencaDeTempo;
+                    acaoI_T1 = somaErro_T1 + ki_T1*erro_T1*diferencaDeTempo;
+                    somaErro_T1 += ki_T1*erro_T1*diferencaDeTempo;
                 }
-                amplitude = getAcaoP() + getAcaoI() + getAcaoD();
+                 sinalDeControle_T1 = acaoP_T1 + acaoI_T1 + acaoD_T1;
             }
         }
-        PVAnterior = PV;
-        sinalDeControle = amplitude;
+        
+        PVAnterior_T1 = PV_T1;
+        erroAnterior_T1 = erro_T1;
+        
+    }
+    
+    
+    void calculoControladorTanque2(double diferencaDeTempo)
+    {
+        if(setPoint_T2 != SPAtual_T2)
+        {
+            mudouSinal = true;
+        }
+        
+        erro_T2 = setPoint_T2 - PV_T2;
+
+        if(controlador_T2 == 0) //P
+        {
+            somaErro_T2 = 0.0;
+            acaoP_T2 = erro_T2*kp_T2;
+            sinalDeControle_T2 = acaoP_T2;
+        }
+        else if(controlador_T2 == 1) //PD kd
+        {
+            somaErro_T2 = 0.0;
+            acaoP_T2 = erro_T2*kp_T2;
+            acaoD_T2 = kd_T2*(erro_T2-erroAnterior_T2)/diferencaDeTempo;
+            if(filtroDerivativo_T2)
+            {
+                acaoD_T2 = acaoD_T2/(1 + gama_T2*acaoD_T2);
+            }
+            sinalDeControle_T2 = acaoP_T2 + acaoI_T2;
+        }
+        else if(controlador_T2 == 2) //PI ki
+        {
+            acaoP_T2 = erro_T2*kp_T2;
+            if(antiWindup_T2 && sinalDeControle_T2 != tensaoSaida && tipoControle == 0)
+            {
+                difSaturacao_T2 = (sinalDeControle_T2 - tensaoSaida)/tauAW_T2;   
+                acaoI_T2 = somaErro_T2 + (ki_T2*erro_T2 - kp_T2*difSaturacao_T2)*diferencaDeTempo ;
+                sinalDeControle_T2 = acaoP_T2 + acaoI_T2;
+                somaErro_T2 += (ki_T2*erro_T2 - kp_T2*difSaturacao_T2)*diferencaDeTempo;
+            }
+            else 
+            {
+                if((integracaoCondicional_T2 || sinalDeControle_T2 == getTensaoSaida()) && tipoControle == 0)
+                {   
+                    acaoI_T2 = somaErro_T2 + ki_T2*erro_T2*diferencaDeTempo;
+                    somaErro_T2 += ki_T2*erro_T2*diferencaDeTempo;
+                }
+                sinalDeControle_T2 = acaoP_T2 + acaoI_T2;
+            }
+        }
+        else if(controlador_T2 == 3) //PID kd e ki
+        {
+            acaoP_T2 = erro_T2*kp_T2;
+            acaoD_T2 = kd_T2*(erro_T2-erroAnterior_T2)/diferencaDeTempo;
+            if(filtroDerivativo_T2)
+            {
+                //acaoD = acaoD/(1 + gama*(acaoD/kp));
+                acaoD_T2 = acaoD_T2/(1 + gama_T2*(acaoD_T2/(kp_T2*erro_T2)));
+            }
+            if(antiWindup_T2 && sinalDeControle_T2 != tensaoSaida && tipoControle == 0)
+            {
+                difSaturacao_T2 = (sinalDeControle_T2 - getTensaoSaida())/tauAW_T2;   
+                acaoI_T2 = somaErro_T2 + (ki_T2*erro_T2 - kp_T2*difSaturacao_T2)*diferencaDeTempo ;
+                 sinalDeControle_T2 = acaoP_T2 + acaoI_T2 + acaoD_T2;
+                somaErro_T2 += (ki_T2*erro_T2 - kp_T2*difSaturacao_T2)*diferencaDeTempo;
+            }
+            else 
+            {
+                if((integracaoCondicional_T2 || sinalDeControle_T2 == tensaoSaida) && tipoControle == 0);
+                {   
+                    acaoI_T2 = somaErro_T2 + ki_T2*erro_T2*diferencaDeTempo;
+                    somaErro_T2 += ki_T2*erro_T2*diferencaDeTempo;
+                }
+                sinalDeControle_T2 = acaoP_T2 + acaoI_T2 + acaoD_T2;
+            }
+        }
+        else if(controlador_T2 == 4) //PI-D kd e ki
+        {
+            acaoP_T2 = erro_T2*kp_T2;
+            acaoD_T2 = kd_T2*(PV_T2-PVAnterior_T2)/diferencaDeTempo;
+            if(filtroDerivativo_T2)
+            {
+                acaoD_T2 = acaoD_T2/(1 + gama_T2*acaoD_T2);
+            }
+            if(antiWindup_T2 && sinalDeControle_T2 != tensaoSaida && tipoControle == 0)
+            {
+                difSaturacao_T2 = (sinalDeControle_T2 - tensaoSaida)/tauAW_T2;
+                acaoI_T2 = somaErro_T2 + ( ki_T2*erro_T2 - kp_T2*difSaturacao_T2 )*diferencaDeTempo ;
+                 sinalDeControle_T2 = acaoP_T2 + acaoI_T2 + acaoD_T2;
+                somaErro_T2 += (ki_T2*erro_T2 - kp_T2*difSaturacao_T2)*diferencaDeTempo;
+            }
+            else 
+            {   
+                if((!integracaoCondicional_T2 || sinalDeControle_T2 == tensaoSaida) && tipoControle == 0)
+                {   
+                    acaoI_T2 = somaErro_T2 + ki_T2*erro_T2*diferencaDeTempo;
+                    somaErro_T2 += ki_T2*erro_T2*diferencaDeTempo;
+                }
+                 sinalDeControle_T2 = acaoP_T2 + acaoI_T2 + acaoD_T2;
+            }
+        }
+        
+        PVAnterior_T2 = PV_T2;
+        erroAnterior_T2 = erro_T2;
+        
     }
     
     void calcularIndicadoresDeSegundaOrdem(double tempoEmS, double diferencaDeTempo)
@@ -363,23 +502,23 @@ public class SinalSaida {
         if(mudouSinal)
         {
             tempoSubida = 0.0;
-            overshoot = PV;
-            overshootSat = PV;
+            overshoot = PV_T2;
+            overshootSat = PV_T2;
             tempoPico = 0.0;
             tempoAcomodacao = 0.0;
             tempoInicioSinalNovo = tempoEmS;
-            SPAnterior = SPAtual;
-            SPAtual = setPoint;
+            SPAnterior_T2 = SPAtual_T2;
+            SPAtual_T2 = setPoint_T2;
             calculouInicioTempoSubida = false;
             calculouTempoSubida = false;
             calculouOvershoot = false;
-            mudancaSP = SPAtual - SPAnterior;
+            mudancaSP = SPAtual_T2 - SPAnterior_T2;
 
             mudouSinal = false;
         }
         else //Verificar atraso de transporte
         {
-            derivadaPV = (PV-PVAnterior)/diferencaDeTempo;
+            derivadaPV = (PV_T2-PVAnterior_T2)/diferencaDeTempo;
             if(mudancaSP <= 0.0)
             {
                 CalcularTempoDescida(tempoEmS);
@@ -388,19 +527,19 @@ public class SinalSaida {
                 if(!isCalculouOvershoot())
                 {
                     overshootMin(tempoEmS);
-                    if(PV <= setPoint && derivadaPV >= 0.6)
+                    if(PV_T2 <= setPoint_T2 && derivadaPV >= 0.6)
                     {
                         calculouOvershoot = true;
                     }
                 }
             }
-            else //SPAtual > SPAnterior
+            else //SPAtual_T2 > SPAnterior_T2
             {
                 CalcularTempoSubida(tempoEmS);
                 if(!isCalculouOvershoot())
                 {
                     overshootMax(tempoEmS);
-                    if(PV >= setPoint && derivadaPV <= -0.6)
+                    if(PV_T2 >= setPoint_T2 && derivadaPV <= -0.6)
                     {
                         calculouOvershoot = true;
                     }
@@ -413,14 +552,14 @@ public class SinalSaida {
                 {
                     if(isPareceAcomodado())
                     {
-                        if((PV > 1.02*setPoint) || (PV < 0.98*setPoint))
+                        if((PV_T2 > 1.02*setPoint_T2) || (PV_T2 < 0.98*setPoint_T2))
                         {   
                             pareceAcomodado = false;
                         }
                     }
                     else
                     {
-                        if((PV >= 0.98*setPoint) && (PV <= 1.02*setPoint))
+                        if((PV_T2 >= 0.98*setPoint_T2) && (PV_T2 <= 1.02*setPoint_T2))
                         {   
                             pareceAcomodado = true;
                             tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
@@ -431,14 +570,14 @@ public class SinalSaida {
                 {
                     if(isPareceAcomodado())
                     {
-                        if((PV > 1.05*setPoint) || (PV < 0.95*setPoint))
+                        if((PV_T2 > 1.05*setPoint_T2) || (PV_T2 < 0.95*setPoint_T2))
                         {   
                             pareceAcomodado = false;
                         }
                     }
                     else
                     {
-                        if((PV >= 0.95*setPoint) && (PV <= 1.05*setPoint))
+                        if((PV_T2 >= 0.95*setPoint_T2) && (PV_T2 <= 1.05*setPoint_T2))
                         {   
                             pareceAcomodado = true;
                             tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
@@ -449,14 +588,14 @@ public class SinalSaida {
                 {
                     if(isPareceAcomodado())
                     {
-                        if((PV > 1.07*setPoint) || (PV < 0.93*setPoint))
+                        if((PV_T2 > 1.07*setPoint_T2) || (PV_T2 < 0.93*setPoint_T2))
                         {   
                             pareceAcomodado = false;
                         }
                     }
                     else
                     {
-                        if((PV >= 0.93*setPoint) && (PV <= 1.07*setPoint))
+                        if((PV_T2 >= 0.93*setPoint_T2) && (PV_T2 <= 1.07*setPoint_T2))
                         {   
                             pareceAcomodado = true;
                             tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
@@ -467,14 +606,14 @@ public class SinalSaida {
                 {
                     if(isPareceAcomodado())
                     {//Ver getDerivada
-                        if((PV > 1.1*setPoint) || (PV < 0.9*setPoint))
+                        if((PV_T2 > 1.1*setPoint_T2) || (PV_T2 < 0.9*setPoint_T2))
                         {   
                             pareceAcomodado = false;
                         }
                     }
                     else
                     {
-                        if((PV >= 0.9*setPoint) && (PV <= 1.1*setPoint))
+                        if((PV_T2 >= 0.9*setPoint_T2) && (PV_T2 <= 1.1*setPoint_T2))
                         {   
                             pareceAcomodado = true;
                             tempoAcomodacao = tempoEmS - tempoInicioSinalNovo;
@@ -485,135 +624,39 @@ public class SinalSaida {
         }
     }
     
-    void setarTravas()
+    void setarTravas(double sinalTrava)
     {
-        if(amplitude > 4)
+        if(sinalTrava > 4)
         {
                 tensaoSaida = 4;
         }
-        else if(amplitude < -4)
+        else if(sinalTrava < -4)
         {
                 tensaoSaida = -4;
         }
-        if( nivelTanqueTrava > 28)
+        if( PV_T1 > 28)
         {
-            if( amplitude > 3.15)
+            if(sinalTrava > 3.15)
             {
                 //tensaoSaida = 2.82;
                 tensaoSaida = 2.9;
             }
-            if( nivelTanqueTrava > 29)
+            if( PV_T1 > 29)
             {
                 tensaoSaida = 0;
             }
         }
-        else if(nivelTanqueTrava < 4 && getTensaoSaida() < 0)
+        else if(PV_T1 < 4 && tensaoSaida < 0)
         {
               tensaoSaida = 0;
         }
     }
     
-    void calculoCascata(double diferencaDeTempo)
-    {
-        
-        //erroAnterior = getErro();
-        erro_MI = amplitude - nivelTanqueTrava;
-        
-        if(tipoControle_MI == 0) //P
-        {
-            somaErro_MI = 0.0;
-            acaoP_MI = erro_MI*kp_MI;
-            sinalDeControle_MI = acaoP_MI;
-        }
-        else if(tipoControle_MI == 1) //PD kd
-        {
-            somaErro_MI = 0.0;
-            acaoP_MI = erro_MI*kp_MI;
-            acaoD_MI = kd*(erro_MI-erroAnterior_MI)/diferencaDeTempo;
-            if(filtroDerivativo_MI)
-            {
-                acaoD_MI = acaoD_MI/(1 + gama_MI*acaoD_MI);
-            }
-            sinalDeControle_MI = acaoP_MI + acaoI_MI;
-        }
-        else if(tipoControle_MI == 2) //PI ki
-        {
-            acaoP_MI = erro_MI*kp_MI;
-            if(antiWindup_MI && sinalDeControle_MI != tensaoSaida)
-            {
-                difSaturacao_MI = (sinalDeControle_MI - tensaoSaida)/tauAW_MI;   
-                acaoI_MI = somaErro_MI + (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo ;
-                sinalDeControle_MI = acaoP_MI + acaoI_MI;
-                somaErro_MI += (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo;
-            }
-            else 
-            {
-                if(!integracaoCondicional_MI || sinalDeControle_MI == tensaoSaida)
-                {   
-                    acaoI_MI = somaErro_MI + ki_MI*erro_MI*diferencaDeTempo;
-                    somaErro += ki_MI*erro_MI*diferencaDeTempo;
-                }
-                sinalDeControle_MI = acaoP_MI + acaoI_MI;
-            }
-        }
-        else if(tipoControle_MI == 3) //PID kd e ki
-        {
-            acaoP_MI = erro_MI*kp_MI;
-            acaoD_MI = kd*(erro_MI-erroAnterior_MI)/diferencaDeTempo;
-            if(filtroDerivativo_MI)
-            {
-                acaoD_MI = acaoD_MI/(1 + gama_MI*acaoD_MI);
-            }
-            if(antiWindup_MI && sinalDeControle_MI != tensaoSaida)
-            {
-                difSaturacao_MI = (sinalDeControle_MI - tensaoSaida)/tauAW_MI;   
-                acaoI_MI = somaErro_MI + (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo ;
-                sinalDeControle_MI = acaoP_MI + acaoI_MI;
-                somaErro_MI += (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo;
-            }
-            else 
-            {
-                if(!integracaoCondicional_MI || sinalDeControle_MI == tensaoSaida)
-                {   
-                    acaoI_MI = somaErro_MI + ki_MI*erro_MI*diferencaDeTempo;
-                    somaErro += ki_MI*erro_MI*diferencaDeTempo;
-                }
-                sinalDeControle_MI = acaoP_MI + acaoI_MI;
-            }
-        }
-        else if(tipoControle_MI == 4) //PI-D kd e ki
-        {
-            acaoP_MI = erro_MI*kp_MI;
-            acaoD_MI = kd*(nivelTanqueTrava-PVAnterior_MI)/diferencaDeTempo;
-            if(filtroDerivativo_MI)
-            {
-                acaoD_MI = acaoD_MI/(1 + gama_MI*acaoD_MI);
-            }
-            if(antiWindup_MI && sinalDeControle_MI != tensaoSaida)
-            {
-                difSaturacao_MI = (sinalDeControle_MI - tensaoSaida)/tauAW_MI;   
-                acaoI_MI = somaErro_MI + (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo ;
-                sinalDeControle_MI = acaoP_MI + acaoI_MI;
-                somaErro_MI += (ki_MI*erro_MI - kp_MI*difSaturacao_MI)*diferencaDeTempo;
-            }
-            else 
-            {
-                if(!integracaoCondicional_MI || sinalDeControle_MI == tensaoSaida)
-                {   
-                    acaoI_MI = somaErro_MI + ki_MI*erro_MI*diferencaDeTempo;
-                    somaErro += ki_MI*erro_MI*diferencaDeTempo;
-                }
-                sinalDeControle_MI = acaoP_MI + acaoI_MI;
-            }
-        }
-        PVAnterior_MI = nivelTanqueTrava;
-    }
-    
     void configurarSimulacao()
     {
-        //PV += (0.2*tensaoSaida - PV*0.01);
-        nivelTanqueTrava += (0.2*tensaoSaida - nivelTanqueTrava*0.01);
-        PV += (0.3*nivelTanqueTrava - PV*0.01);
+        //PV_T2 += (0.2*tensaoSaida - PV_T2*0.01);
+        PV_T1 += (0.2*getTensaoSaida() - PV_T1*0.01);
+        PV_T2 += (0.3*PV_T1 - PV_T2*0.01);
     }
     
     
@@ -624,59 +667,65 @@ public class SinalSaida {
         
         calculoMalhaAberta(tempoEmS, tempoClasse);
 
-        if( isMalhaFechada())
+        if(isMalhaFechada())
         {
-            switch(tipoSistemaControle)
-            {   
-                case 0:
-                {
-                    calculoMalhaFechada(diferencaDeTempo);
-                    break;
-                }
-                case 1:
-                {
-                    calculoMalhaFechada(diferencaDeTempo);
-                    calcularIndicadoresDeSegundaOrdem(tempoEmS, diferencaDeTempo);
-                    break;
-                }
+            if(!segundaOrdem)
+            {//Controle Simples do Tanque 1
+                setSetPoint_T1(amplitudeSinal);
+                calculoControladorTanque1(diferencaDeTempo);
+                setarTravas(sinalDeControle_T1);
+            }
+            else
+            {
+                switch(tipoControle)
+                {   
+                    case 0:
+                    {//Controle Simples do Tanque 2
+                        setPoint_T2 = amplitudeSinal;
+                        calculoControladorTanque2(diferencaDeTempo);
+                        setarTravas(sinalDeControle_T2);
+                        calcularIndicadoresDeSegundaOrdem(tempoEmS, diferencaDeTempo);
+                        break;
+                    }
 
-                case 2:
-                {
-                    calculoMalhaFechada(diferencaDeTempo);
-                    calculoCascata(diferencaDeTempo);
-                    calcularIndicadoresDeSegundaOrdem(tempoEmS, diferencaDeTempo);
-                    break;
+                    case 1:
+                    {//Controle em cascata do Tanque 2
+                        setPoint_T2 = amplitudeSinal;
+                        calculoControladorTanque2(diferencaDeTempo);
+                        setSetPoint_T1(sinalDeControle_T2);
+                        calculoControladorTanque1(diferencaDeTempo);
+                        setarTravas(sinalDeControle_T1);
+                        calcularIndicadoresDeSegundaOrdem(tempoEmS, diferencaDeTempo);
+                        break;
+                    }
                 }
             }
         }
         else
         {
-            setSetPoint(0.0);
+            //setSetPoint(0.0);
         }
-
-        tensaoSaida = amplitude;
-        setarTravas();
                 
         configurarSimulacao();
     }
     
     void overshootMin(double tempoEmS)
     {            
-        if(PV < overshootSat)
+        if(PV_T2 < overshootSat)
         {
-            overshootSat = PV;
+            overshootSat = PV_T2;
             tempoPico = tempoEmS - tempoInicioSinalNovo;
          
-            switch(getTipoOvershoot())
+            switch(tipoOvershoot)
             {
                 case 0:
                 {
-                    overshoot = (setPoint-PV)*100/setPoint;
+                    overshoot = (setPoint_T2-PV_T2)*100/setPoint_T2;
                     break;
                 }
                 case 1:
                 {
-                    overshoot = (setPoint-PV);
+                    overshoot = (setPoint_T2-PV_T2);
                     break;
                 }
             }
@@ -685,20 +734,20 @@ public class SinalSaida {
     
     void overshootMax(double tempoEmS)
     {
-        if(PV > overshootSat)
+        if(PV_T2 > overshootSat)
         {
-            overshootSat = PV;
+            overshootSat = PV_T2;
             tempoPico = tempoEmS - tempoInicioSinalNovo;
-            switch(getTipoOvershoot())
+            switch(tipoOvershoot)
             {
                 case 0:
                 {
-                    overshoot = (PV-setPoint)*100/setPoint;
+                    overshoot = (PV_T2-setPoint_T2)*100/setPoint_T2;
                     break;
                 }
                 case 1:
                 {
-                    overshoot = (PV-setPoint);
+                    overshoot = (PV_T2-setPoint_T2);
                     break;
                 }
             }
@@ -715,7 +764,7 @@ public class SinalSaida {
         {
             case 0:
             {
-                if(!isCalculouTempoSubida() && PV <= SPAtual)
+                if(!isCalculouTempoSubida() && PV_T2 <= SPAtual_T2)
                 {
                     tempoSubida = tempoEmS - tempoInicioSinalNovo;
                     calculouTempoSubida = true;
@@ -724,14 +773,14 @@ public class SinalSaida {
             }
             case 1:
             {
-                if(!calculouInicioTempoSubida && PV <= SPAnterior-0.05*mudancaSP)
+                if(!calculouInicioTempoSubida && PV_T2 <= SPAnterior_T2-0.05*mudancaSP)
                 {
                     tempoInicioSubida = tempoEmS;
                     calculouInicioTempoSubida = true;
                 }
                 else
                 {
-                    if(!isCalculouTempoSubida() && PV <= SPAnterior-0.95*mudancaSP)
+                    if(!isCalculouTempoSubida() && PV_T2 <= SPAnterior_T2-0.95*mudancaSP)
                     {
                         tempoSubida = tempoEmS - tempoInicioSubida;
                         calculouTempoSubida = true;
@@ -741,14 +790,14 @@ public class SinalSaida {
             }
             case 2:
             {
-                if(!calculouInicioTempoSubida && PV <= SPAnterior-0.1*mudancaSP)
+                if(!calculouInicioTempoSubida && PV_T2 <= SPAnterior_T2-0.1*mudancaSP)
                 {
                     tempoInicioSubida = tempoEmS;
                     calculouInicioTempoSubida = true;
                 }
                 else
                 {
-                    if(!isCalculouTempoSubida() && PV <= SPAnterior-0.9*mudancaSP)
+                    if(!isCalculouTempoSubida() && PV_T2 <= SPAnterior_T2-0.9*mudancaSP)
                     {
                         tempoSubida = tempoEmS - tempoInicioSubida;
                         calculouTempoSubida = true;
@@ -766,7 +815,7 @@ public class SinalSaida {
         {
             case 0:
             {
-                if(!isCalculouTempoSubida() && PV >= SPAtual)
+                if(!isCalculouTempoSubida() && PV_T2 >= SPAtual_T2)
                 {
                     tempoSubida = tempoEmS - tempoInicioSinalNovo;
                     calculouTempoSubida = true;
@@ -775,14 +824,14 @@ public class SinalSaida {
             }
             case 1:
             {
-                if(!calculouInicioTempoSubida && PV >= SPAnterior+0.05*mudancaSP)
+                if(!calculouInicioTempoSubida && PV_T2 >= SPAnterior_T2+0.05*mudancaSP)
                 {
                     tempoInicioSubida = tempoEmS;
                     calculouInicioTempoSubida = true;
                 }
                 else
                 {
-                    if(!isCalculouTempoSubida() && PV >= SPAnterior+0.95*mudancaSP)
+                    if(!isCalculouTempoSubida() && PV_T2 >= SPAnterior_T2+0.95*mudancaSP)
                     {
                         tempoSubida = tempoEmS - tempoInicioSubida;
                         calculouTempoSubida = true;
@@ -792,14 +841,14 @@ public class SinalSaida {
             }
             case 2:
             {
-                if(!calculouInicioTempoSubida && PV >= SPAnterior+0.1*mudancaSP)
+                if(!calculouInicioTempoSubida && PV_T2 >= SPAnterior_T2+0.1*mudancaSP)
                 {
                     tempoInicioSubida = tempoEmS;
                     calculouInicioTempoSubida = true;
                 }
                 else
                 {
-                    if(!isCalculouTempoSubida() && PV >= SPAnterior+0.9*mudancaSP)
+                    if(!isCalculouTempoSubida() && PV_T2 >= SPAnterior_T2+0.9*mudancaSP)
                     {
                         tempoSubida = tempoEmS - tempoInicioSubida;
                         calculouTempoSubida = true;
@@ -809,99 +858,12 @@ public class SinalSaida {
             }
         }
     }
-    
-    /**
-     * @return the PV
-     */
-    public double getPV() {
-        return PV;
-    }
 
     /**
-     * @param PV the PV to set
-     */
-    public void setPV(double PV) {
-        this.PV = PV;
-    }
-
-    
-    
-    /**
-     * @return the amplitude
-     */
-    public double getAmplitude() {
-        return amplitude;
-    }
-
-    
-    /**
-     * @param amplitude the amplitude to set
-     */
-    public void setAmplitude(double amplitude) {
-        this.amplitude = amplitude;
-    }
-
-    /**
-     * @return the amplitudeMax
-     */
-    public double getAmplitudeMax() {
-        return amplitudeMax;
-    }
-
-    /**
-     * @param amplitudeMax the amplitudeMax to set
+     * @param sinalTravaMax the amplitudeMax to set
      */
     public void setAmplitudeMax(double amplitudeMax) {
         this.amplitudeMax = amplitudeMax;
-    }
-
-    /**
-     * @return the amplitudeMin
-     */
-    public double getAmplitudeMin() {
-        return amplitudeMin;
-    }
-
-    /**
-     * @param amplitudeMin the amplitudeMin to set
-     */
-    public void setAmplitudeMin(double amplitudeMin) {
-        this.amplitudeMin = amplitudeMin;
-    }
-
-    /**
-     * @return the duracaoMax
-     */
-    public double getDuracaoMax() {
-        return duracaoMax;
-    }
-
-    /**
-     * @param duracaoMax the duracaoMax to set
-     */
-    public void setDuracaoMax(double duracaoMax) {
-        this.duracaoMax = duracaoMax;
-    }
-
-    /**
-     * @return the duracaoMin
-     */
-    public double getDuracaoMin() {
-        return duracaoMin;
-    }
-
-    /**
-     * @param duracaoMin the duracaoMin to set
-     */
-    public void setDuracaoMin(double duracaoMin) {
-        this.duracaoMin = duracaoMin;
-    }
-
-    /**
-     * @return the periodo
-     */
-    public double getPeriodo() {
-        return periodo;
     }
 
     /**
@@ -912,39 +874,10 @@ public class SinalSaida {
     }
 
     /**
-     * @return the tipo
-     */
-    public int getTipo() {
-        return tipo;
-    }
-
-    /**
-     * @param tipo the tipo to set
-     */
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
-    /**
-     * @return the offset
-     */
-    public double getOffset() {
-        return offset;
-    }
-
-    /**
      * @param offset the offset to set
      */
     public void setOffset(double offset) {
         this.offset = offset;
-    }
-
-
-    /**
-     * @return the malhaFechada
-     */
-    public boolean isMalhaFechada() {
-        return malhaFechada;
     }
 
     /**
@@ -955,150 +888,31 @@ public class SinalSaida {
     }
 
     /**
-     * @return the tensaoSaida
+     * @param tipoOnda the tipoOnda to set
      */
-    public double getTensaoSaida() {
-        return tensaoSaida;
+    public void setTipoOnda(int tipoOnda) {
+        this.tipoOnda = tipoOnda;
     }
 
     /**
-     * @return the setPoint
+     * @param amplitudeMin the amplitudeMin to set
      */
-    public double getSetPoint() {
-        return setPoint;
+    public void setAmplitudeMin(double amplitudeMin) {
+        this.amplitudeMin = amplitudeMin;
     }
 
     /**
-     * @param setPoint the setPoint to set
+     * @param duracaoMax the duracaoMax to set
      */
-    public void setSetPoint(double setPoint) {
-        this.setPoint = setPoint;
+    public void setDuracaoMax(double duracaoMax) {
+        this.duracaoMax = duracaoMax;
     }
 
     /**
-     * @return the kp
+     * @param duracaoMin the duracaoMin to set
      */
-    public double getKp() {
-        return kp;
-    }
-
-    /**
-     * @param kp the kp to set
-     */
-    public void setKp(double kp) {
-        this.kp = kp;
-    }
-
-    /**
-     * @return the kd
-     */
-    public double getKd() {
-        return kd;
-    }
-
-    /**
-     * @param kd the kd to set
-     */
-    public void setKd(double kd) {
-        this.kd = kd;
-    }
-
-    /**
-     * @return the ki
-     */
-    public double getKi() {
-        return ki;
-    }
-
-    /**
-     * @param ki the ki to set
-     */
-    public void setKi(double ki) {
-        this.ki = ki;
-    }
-
-    /**
-     * @return the td
-     */
-    public double getTd() {
-        return td;
-    }
-
-    /**
-     * @param td the td to set
-     */
-    public void setTd(double td) {
-        this.td = td;
-    }
-
-    /**
-     * @return the ti
-     */
-    public double getTi() {
-        return ti;
-    }
-
-    /**
-     * @param ti the ti to set
-     */
-    public void setTi(double ti) {
-        this.ti = ti;
-    }
-
-    /**
-     * @return the erro
-     */
-    public double getErro() {
-        return erro;
-    }
-
-    /**
-     * @return the antiWindup
-     */
-    public boolean isAntiWindup() {
-        return antiWindup;
-    }
-
-    /**
-     * @param antiWindup the antiWindup to set
-     */
-    public void setAntiWindup(boolean antiWindup) {
-        this.antiWindup = antiWindup;
-    }
-
-    /**
-     * @return the tauAW
-     */
-    public double getTauAW() {
-        return tauAW;
-    }
-
-    /**
-     * @param tauAW the tauAW to set
-     */
-    public void setTauAW(double tauAW) {
-        this.tauAW = tauAW;
-    }
-
-    /**
-     * @return the integracaoCondicional
-     */
-    public boolean isIntegracaoCondicional() {
-        return integracaoCondicional;
-    }
-
-    /**
-     * @param integracaoCondicional the integracaoCondicional to set
-     */
-    public void setIntegracaoCondicional(boolean integracaoCondicional) {
-        this.integracaoCondicional = integracaoCondicional;
-    }
-
-    /**
-     * @return the tipoControle
-     */
-    public int getTipoControle() {
-        return tipoControle;
+    public void setDuracaoMin(double duracaoMin) {
+        this.duracaoMin = duracaoMin;
     }
 
     /**
@@ -1109,31 +923,318 @@ public class SinalSaida {
     }
 
     /**
-     * @return the acaoP
+     * @return the PV_T2
      */
-    public double getAcaoP() {
-        return acaoP;
+    public double getPV_T2() {
+        return PV_T2;
     }
 
     /**
-     * @return the acaoI
+     * @param PV_T2 the PV_T2 to set
      */
-    public double getAcaoI() {
-        return acaoI;
+    public void setPV_T2(double PV_T2) {
+        this.PV_T2 = PV_T2;
     }
 
     /**
-     * @return the acaoD
+     * @return the PV_T1
      */
-    public double getAcaoD() {
-        return acaoD;
+    public double getPV_T1() {
+        return PV_T1;
     }
 
     /**
-     * @param nivelTanqueTrava the nivelTanqueTrava to set
+     * @param PV_T1 the PV_T1 to set
      */
-    public void setNivelTanqueTrava(double nivelTanqueTrava) {
-        this.nivelTanqueTrava = nivelTanqueTrava;
+    public void setPV_T1(double PV_T1) {
+        this.PV_T1 = PV_T1;
+    }
+
+    /**
+     * @return the setPoint_T2
+     */
+    public double getSetPoint_T2() {
+        return setPoint_T2;
+    }
+
+    /**
+     * @param setPoint_T2 the setPoint_T2 to set
+     */
+    public void setSetPoint_T2(double setPoint_T2) {
+        this.setPoint_T2 = setPoint_T2;
+    }
+
+    /**
+     * @return the amplitudeSinal
+     */
+    public double getAmplitudeSinal() {
+        return amplitudeSinal;
+    }
+
+    /**
+     * @return the tensaoSaida
+     */
+    public double getTensaoSaida() {
+        return tensaoSaida;
+    }
+
+    /**
+     * @return the kp_T2
+     */
+    public double getKp_T2() {
+        return kp_T2;
+    }
+
+    /**
+     * @param kp_T2 the kp_T2 to set
+     */
+    public void setKp_T2(double kp_T2) {
+        this.kp_T2 = kp_T2;
+    }
+
+    /**
+     * @param kd_T2 the kd_T2 to set
+     */
+    public void setKd_T2(double kd_T2) {
+        this.kd_T2 = kd_T2;
+    }
+
+    /**
+     * @param ki_T2 the ki_T2 to set
+     */
+    public void setKi_T2(double ki_T2) {
+        this.ki_T2 = ki_T2;
+    }
+
+    /**
+     * @param td_T2 the td_T2 to set
+     */
+    public void setTd_T2(double td_T2) {
+        this.td_T2 = td_T2;
+    }
+
+    /**
+     * @param ti_T2 the ti_T2 to set
+     */
+    public void setTi_T2(double ti_T2) {
+        this.ti_T2 = ti_T2;
+    }
+
+    /**
+     * @param segundaOrdem the segundaOrdem to set
+     */
+    public void setSegundaOrdem(boolean segundaOrdem) {
+        this.segundaOrdem = segundaOrdem;
+    }
+
+    /**
+     * @param controlador_T2 the controlador_T2 to set
+     */
+    public void setControlador_T2(int controlador_T2) {
+        this.controlador_T2 = controlador_T2;
+    }
+
+    /**
+     * @param kp_T1 the kp_T1 to set
+     */
+    public void setKp_T1(double kp_T1) {
+        this.kp_T1 = kp_T1;
+    }
+
+    /**
+     * @param kd_T1 the kd_T1 to set
+     */
+    public void setKd_T1(double kd_T1) {
+        this.kd_T1 = kd_T1;
+    }
+
+    /**
+     * @param ki_T1 the ki_T1 to set
+     */
+    public void setKi_T1(double ki_T1) {
+        this.ki_T1 = ki_T1;
+    }
+
+    /**
+     * @param td_T1 the td_T1 to set
+     */
+    public void setTd_T1(double td_T1) {
+        this.td_T1 = td_T1;
+    }
+
+    /**
+     * @param ti_T1 the ti_T1 to set
+     */
+    public void setTi_T1(double ti_T1) {
+        this.ti_T1 = ti_T1;
+    }
+
+    /**
+     * @param controlador_T1 the controlador_T1 to set
+     */
+    public void setControlador_T1(int controlador_T1) {
+        this.controlador_T1 = controlador_T1;
+    }
+
+    /**
+     * @return the sinalDeControle_T2
+     */
+    public double getSinalDeControle_T2() {
+        return sinalDeControle_T2;
+    }
+
+    /**
+     * @return the acaoP_T2
+     */
+    public double getAcaoP_T2() {
+        return acaoP_T2;
+    }
+
+    /**
+     * @return the acaoI_T2
+     */
+    public double getAcaoI_T2() {
+        return acaoI_T2;
+    }
+
+    /**
+     * @return the acaoD_T2
+     */
+    public double getAcaoD_T2() {
+        return acaoD_T2;
+    }
+
+    /**
+     * @return the sinalDeControle_T1
+     */
+    public double getSinalDeControle_T1() {
+        return sinalDeControle_T1;
+    }
+
+    /**
+     * @return the acaoP_T1
+     */
+    public double getAcaoP_T1() {
+        return acaoP_T1;
+    }
+
+    /**
+     * @return the acaoI_T1
+     */
+    public double getAcaoI_T1() {
+        return acaoI_T1;
+    }
+
+    /**
+     * @return the acaoD_T1
+     */
+    public double getAcaoD_T1() {
+        return acaoD_T1;
+    }
+
+    /**
+     * @param antiWindup_T2 the antiWindup_T2 to set
+     */
+    public void setAntiWindup_T2(boolean antiWindup_T2) {
+        this.antiWindup_T2 = antiWindup_T2;
+    }
+
+    /**
+     * @param tauAW_T2 the tauAW_T2 to set
+     */
+    public void setTauAW_T2(double tauAW_T2) {
+        this.tauAW_T2 = tauAW_T2;
+    }
+
+    /**
+     * @param integracaoCondicional_T2 the integracaoCondicional_T2 to set
+     */
+    public void setIntegracaoCondicional_T2(boolean integracaoCondicional_T2) {
+        this.integracaoCondicional_T2 = integracaoCondicional_T2;
+    }
+
+    /**
+     * @param gama_T2 the gama_T2 to set
+     */
+    public void setGama_T2(double gama_T2) {
+        this.gama_T2 = gama_T2;
+    }
+
+    /**
+     * @param filtroDerivativo_T2 the filtroDerivativo_T2 to set
+     */
+    public void setFiltroDerivativo_T2(boolean filtroDerivativo_T2) {
+        this.filtroDerivativo_T2 = filtroDerivativo_T2;
+    }
+
+    /**
+     * @param antiWindup_T1 the antiWindup_T1 to set
+     */
+    public void setAntiWindup_T1(boolean antiWindup_T1) {
+        this.antiWindup_T1 = antiWindup_T1;
+    }
+
+    /**
+     * @param tauAW_T1 the tauAW_T1 to set
+     */
+    public void setTauAW_T1(double tauAW_T1) {
+        this.tauAW_T1 = tauAW_T1;
+    }
+
+    /**
+     * @param integracaoCondicional_T1 the integracaoCondicional_T1 to set
+     */
+    public void setIntegracaoCondicional_T1(boolean integracaoCondicional_T1) {
+        this.integracaoCondicional_T1 = integracaoCondicional_T1;
+    }
+
+    /**
+     * @param gama_T1 the gama_T1 to set
+     */
+    public void setGama_T1(double gama_T1) {
+        this.gama_T1 = gama_T1;
+    }
+
+    /**
+     * @param filtroDerivativo_T1 the filtroDerivativo_T1 to set
+     */
+    public void setFiltroDerivativo_T1(boolean filtroDerivativo_T1) {
+        this.filtroDerivativo_T1 = filtroDerivativo_T1;
+    }
+
+    /**
+     * @return the erro_T1
+     */
+    public double getErro_T1() {
+        return erro_T1;
+    }
+
+    /**
+     * @return the erro_T2
+     */
+    public double getErro_T2() {
+        return erro_T2;
+    }
+
+    /**
+     * @param tipoOvershoot the tipoOvershoot to set
+     */
+    public void setTipoOvershoot(int tipoOvershoot) {
+        this.tipoOvershoot = tipoOvershoot;
+    }
+
+    /**
+     * @param tipoTempoSubida the tipoTempoSubida to set
+     */
+    public void setTipoTempoSubida(int tipoTempoSubida) {
+        this.tipoTempoSubida = tipoTempoSubida;
+    }
+
+    /**
+     * @param tipoTempoAcomodacao the tipoTempoAcomodacao to set
+     */
+    public void setTipoTempoAcomodacao(int tipoTempoAcomodacao) {
+        this.tipoTempoAcomodacao = tipoTempoAcomodacao;
     }
 
     /**
@@ -1186,136 +1287,26 @@ public class SinalSaida {
     }
 
     /**
-     * @return the derivadaPV
+     * @return the setPoint_T1
      */
-    public double getDerivadaPV() {
-        return derivadaPV;
+    public double getSetPoint_T1() {
+        return setPoint_T1;
     }
 
     /**
-     * @param tipoOvershoot the tipoOvershoot to set
+     * @param setPoint_T1 the setPoint_T1 to set
      */
-    public void setTipoOvershoot(int tipoOvershoot) {
-        this.tipoOvershoot = tipoOvershoot;
+    public void setSetPoint_T1(double setPoint_T1) {
+        this.setPoint_T1 = setPoint_T1;
     }
 
     /**
-     * @param tipoTempoSubida the tipoTempoSubida to set
+     * @return the malhaFechada
      */
-    public void setTipoTempoSubida(int tipoTempoSubida) {
-        this.tipoTempoSubida = tipoTempoSubida;
+    public boolean isMalhaFechada() {
+        return malhaFechada;
     }
 
-    /**
-     * @param tipoTempoAcomodacao the tipoTempoAcomodacao to set
-     */
-    public void setTipoTempoAcomodacao(int tipoTempoAcomodacao) {
-        this.tipoTempoAcomodacao = tipoTempoAcomodacao;
-    }
 
-    /**
-     * @param gama the gama to set
-     */
-    public void setGama(double gama) {
-        this.gama = gama;
-    }
-
-    /**
-     * @param filtroDerivativo the filtroDerivativo to set
-     */
-    public void setFiltroDerivativo(boolean filtroDerivativo) {
-        this.filtroDerivativo = filtroDerivativo;
-    }
-
-    /**
-     * @return the tipoOvershoot
-     */
-    public int getTipoOvershoot() {
-        return tipoOvershoot;
-    }
-
-    /**
-     * @param antiWindup_MI the antiWindup_MI to set
-     */
-    public void setAntiWindup_MI(boolean antiWindup_MI) {
-        this.antiWindup_MI = antiWindup_MI;
-    }
-
-    /**
-     * @param tauAW_MI the tauAW_MI to set
-     */
-    public void setTauAW_MI(double tauAW_MI) {
-        this.tauAW_MI = tauAW_MI;
-    }
-
-    /**
-     * @param integracaoCondicional_MI the integracaoCondicional_MI to set
-     */
-    public void setIntegracaoCondicional_MI(boolean integracaoCondicional_MI) {
-        this.integracaoCondicional_MI = integracaoCondicional_MI;
-    }
-
-    /**
-     * @param gama_MI the gama_MI to set
-     */
-    public void setGama_MI(double gama_MI) {
-        this.gama_MI = gama_MI;
-    }
-
-    /**
-     * @param filtroDerivativo_MI the filtroDerivativo_MI to set
-     */
-    public void setFiltroDerivativo_MI(boolean filtroDerivativo_MI) {
-        this.filtroDerivativo_MI = filtroDerivativo_MI;
-    }
-
-    /**
-     * @param kp_MI the kp_MI to set
-     */
-    public void setKp_MI(double kp_MI) {
-        this.kp_MI = kp_MI;
-    }
-
-    /**
-     * @param kd_MI the kd_MI to set
-     */
-    public void setKd_MI(double kd_MI) {
-        this.kd_MI = kd_MI;
-    }
-
-    /**
-     * @param ki_MI the ki_MI to set
-     */
-    public void setKi_MI(double ki_MI) {
-        this.ki_MI = ki_MI;
-    }
-
-    /**
-     * @param td_MI the td_MI to set
-     */
-    public void setTd_MI(double td_MI) {
-        this.td_MI = td_MI;
-    }
-
-    /**
-     * @param ti_MI the ti_MI to set
-     */
-    public void setTi_MI(double ti_MI) {
-        this.ti_MI = ti_MI;
-    }
-
-    /**
-     * @param tipoControle_MI the tipoControle_MI to set
-     */
-    public void setTipoControle_MI(int tipoControle_MI) {
-        this.tipoControle_MI = tipoControle_MI;
-    }
-
-    /**
-     * @param tipoSistemaControle the tipoSistemaControle to set
-     */
-    public void setTipoSistemaControle(int tipoSistemaControle) {
-        this.tipoSistemaControle = tipoSistemaControle;
-    }
 
 }
