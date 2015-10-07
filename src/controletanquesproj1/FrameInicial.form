@@ -911,7 +911,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jSpinnerKd_MI" max="32767" attributes="0"/>
+                                  <Component id="jSpinnerKd_MI" pref="70" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -975,7 +975,7 @@
                 <Component class="javax.swing.JSpinner" name="jSpinnerKp_MI">
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                      <SpinnerModel initial="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
+                      <SpinnerModel initial="2.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -987,7 +987,7 @@
                 <Component class="javax.swing.JSpinner" name="jSpinnerKi_MI">
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                      <SpinnerModel initial="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
+                      <SpinnerModel initial="0.5" numberType="java.lang.Double" stepSize="1.0" type="number"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -999,7 +999,7 @@
                 <Component class="javax.swing.JSpinner" name="jSpinnerKd_MI">
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                      <SpinnerModel initial="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
+                      <SpinnerModel initial="0.005" numberType="java.lang.Double" stepSize="1.0" type="number"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -1195,6 +1195,7 @@
                             <StringItem index="4" value="PI-D"/>
                           </StringArray>
                         </Property>
+                        <Property name="selectedIndex" type="int" value="3"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -1346,7 +1347,7 @@
                 <Component class="javax.swing.JSpinner" name="jSpinnerKp">
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                      <SpinnerModel initial="2.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
+                      <SpinnerModel initial="3.5" minimum="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1391,7 +1392,7 @@
                 <Component class="javax.swing.JSpinner" name="jSpinnerKi">
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                      <SpinnerModel initial="0.05" minimum="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
+                      <SpinnerModel initial="0.5" minimum="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1699,6 +1700,7 @@
                             <StringItem index="4" value="PI-D"/>
                           </StringArray>
                         </Property>
+                        <Property name="selectedIndex" type="int" value="3"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCBoxControladorActionPerformed"/>

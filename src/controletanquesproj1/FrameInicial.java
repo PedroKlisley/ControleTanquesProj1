@@ -290,6 +290,7 @@ public class FrameInicial extends javax.swing.JFrame {
         //jLabelTPico.setText("" + controle.getSinalSaida().getDerivadaPV());
 
         //System.out.println("Maximo X: " + xMax);
+        System.out.println("A thread de atualizar interface eh: " + Thread.currentThread());
     }
     
     private void AdicionaItemDeGrafico(String nome, int index)
@@ -1019,15 +1020,15 @@ public class FrameInicial extends javax.swing.JFrame {
 
         jLabel15.setText("Kp");
 
-        jSpinnerKp_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+        jSpinnerKp_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(2.0d), null, null, Double.valueOf(1.0d)));
 
         jLabel20.setText("Ki");
 
-        jSpinnerKi_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+        jSpinnerKi_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.5d), null, null, Double.valueOf(1.0d)));
 
         jLabel24.setText("Kd");
 
-        jSpinnerKd_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(1.0d)));
+        jSpinnerKd_MI.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.005d), null, null, Double.valueOf(1.0d)));
 
         jLabel25.setText("tau_aw");
 
@@ -1065,7 +1066,7 @@ public class FrameInicial extends javax.swing.JFrame {
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addComponent(jLabel24)
                         .addGap(18, 18, 18)
-                        .addComponent(jSpinnerKd_MI)))
+                        .addComponent(jSpinnerKd_MI, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel25)
@@ -1164,6 +1165,7 @@ public class FrameInicial extends javax.swing.JFrame {
         jLabel30.setText("Controlador:");
 
         jCBoxControlador_MI.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "P", "PD", "PI", "PID", "PI-D" }));
+        jCBoxControlador_MI.setSelectedIndex(3);
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
@@ -1228,7 +1230,7 @@ public class FrameInicial extends javax.swing.JFrame {
 
         jLabelKp.setText("Kp");
 
-        jSpinnerKp.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(2.0d), Double.valueOf(0.0d), null, Double.valueOf(1.0d)));
+        jSpinnerKp.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(3.5d), Double.valueOf(0.0d), null, Double.valueOf(1.0d)));
         jSpinnerKp.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinnerKpValueChanged(evt);
@@ -1255,7 +1257,7 @@ public class FrameInicial extends javax.swing.JFrame {
 
         jLabelKi.setText("Ki");
 
-        jSpinnerKi.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.05d), Double.valueOf(0.0d), null, Double.valueOf(1.0d)));
+        jSpinnerKi.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.5d), Double.valueOf(0.0d), null, Double.valueOf(1.0d)));
         jSpinnerKi.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinnerKiValueChanged(evt);
@@ -1466,6 +1468,7 @@ public class FrameInicial extends javax.swing.JFrame {
         jLabel8.setText("Controlador:");
 
         jCBoxControlador.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "P", "PD", "PI", "PID", "PI-D" }));
+        jCBoxControlador.setSelectedIndex(3);
         jCBoxControlador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCBoxControladorActionPerformed(evt);
@@ -1965,17 +1968,18 @@ public class FrameInicial extends javax.swing.JFrame {
     private void AdicionaGraficoTanque1()
     {//Adiciona itens do Tanque 1 ao gráfico
         AdicionaItemDeGrafico("Erro_T1", 1);
-        jCBPlotErro_T1.setSelected(true);
+        //jCBPlotErro_T1.setSelected(true);
         jCBPlotErro_T1.setVisible(true);
 
         AdicionaItemDeGrafico("AcaoP_T1", 0);
-        jCBPlotAcaoP_T1.setSelected(true);
+        //jCBPlotAcaoP_T1.setSelected(true);
         jCBPlotAcaoP_T1.setVisible(true);
-
+        
+        
         if(jCBoxControlador.getSelectedIndex() > 1)
         {
             AdicionaItemDeGrafico("AcaoI_T1", 0);
-            jCBPlotAcaoI_T1.setSelected(true);
+            //jCBPlotAcaoI_T1.setSelected(true);
             jCBPlotAcaoI_T1.setVisible(true);
 
         }
@@ -1989,7 +1993,7 @@ public class FrameInicial extends javax.swing.JFrame {
         if(jCBoxControlador.getSelectedIndex() == 1 || jCBoxControlador.getSelectedIndex() > 2)
         {
             AdicionaItemDeGrafico("AcaoD_T1", 0);
-            jCBPlotAcaoD_T1.setSelected(true);
+            //jCBPlotAcaoD_T1.setSelected(true);
             jCBPlotAcaoD_T1.setVisible(true);
         }
         else
@@ -1998,6 +2002,7 @@ public class FrameInicial extends javax.swing.JFrame {
             jCBPlotAcaoD_T1.setSelected(false);
             jCBPlotAcaoD_T1.setVisible(false);
         }
+        
     }
     
     private void AdicionaGraficoTanque2()
@@ -2011,31 +2016,31 @@ public class FrameInicial extends javax.swing.JFrame {
         jCBPlotMV_T2.setVisible(true);
                 
         AdicionaItemDeGrafico("Erro_T2", 1);
-        jCBPlotErro_T2.setSelected(true);
+        //jCBPlotErro_T2.setSelected(true);
         jCBPlotErro_T2.setVisible(true);
 
         AdicionaItemDeGrafico("AcaoP_T2", 0);
-        jCBPlotAcaoP_T2.setSelected(true);
+        //jCBPlotAcaoP_T2.setSelected(true);
         jCBPlotAcaoP_T2.setVisible(true);
 
         if(jCBoxControlador.getSelectedIndex() > 1)
         {
             AdicionaItemDeGrafico("AcaoI_T2", 0);
-            jCBPlotAcaoI_T2.setSelected(true);
+            //jCBPlotAcaoI_T2.setSelected(true);
             jCBPlotAcaoI_T2.setVisible(true);
 
         }
         else
         {
             RemoveItemDeGrafico("AcaoI_T2", 0);
-            jCBPlotAcaoI_T2.setSelected(false);
+            //jCBPlotAcaoI_T2.setSelected(false);
             jCBPlotAcaoI_T2.setVisible(false);
         }
 
         if(jCBoxControlador.getSelectedIndex() == 1 || jCBoxControlador.getSelectedIndex() > 2)
         {
             AdicionaItemDeGrafico("AcaoD_T2", 0);
-            jCBPlotAcaoD_T2.setSelected(true);
+            //jCBPlotAcaoD_T2.setSelected(true);
             jCBPlotAcaoD_T2.setVisible(true);
         }
         else
@@ -2276,7 +2281,7 @@ public class FrameInicial extends javax.swing.JFrame {
 
             demo.updateSeries(vetorDeItensDeGrafico);
             
-            
+            System.out.println("Botao: " + Thread.currentThread());
         }
         
     }//GEN-LAST:event_jButton_EnviarActionPerformed

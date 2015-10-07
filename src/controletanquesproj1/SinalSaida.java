@@ -120,6 +120,7 @@ public class SinalSaida {
     private double SPAtual_T2;
     private double derivadaPV;
     private double overshootSat;
+    private double derivadaOvershoot;
     
     public SinalSaida()
     {
@@ -230,6 +231,8 @@ public class SinalSaida {
         SPAtual_T2 = 0.0;
         derivadaPV = 0.0;
         overshootSat = 0.0;
+        derivadaOvershoot = 0.3;
+        //derivadaOvershoot = 0.6;
     }
 
     void calculoMalhaAberta(double tempoEmS, Tempo tempoClasse)
@@ -527,7 +530,7 @@ public class SinalSaida {
                 if(!isCalculouOvershoot())
                 {
                     overshootMin(tempoEmS);
-                    if(PV_T2 <= setPoint_T2 && derivadaPV >= 0.6)
+                    if(PV_T2 <= setPoint_T2 && derivadaPV >= derivadaOvershoot)
                     {
                         calculouOvershoot = true;
                     }
@@ -539,7 +542,7 @@ public class SinalSaida {
                 if(!isCalculouOvershoot())
                 {
                     overshootMax(tempoEmS);
-                    if(PV_T2 >= setPoint_T2 && derivadaPV <= -0.6)
+                    if(PV_T2 >= setPoint_T2 && derivadaPV <= -derivadaOvershoot)
                     {
                         calculouOvershoot = true;
                     }
@@ -628,11 +631,15 @@ public class SinalSaida {
     {
         if(sinalTrava > 4)
         {
-                tensaoSaida = 4;
+            tensaoSaida = 4;
         }
         else if(sinalTrava < -4)
         {
-                tensaoSaida = -4;
+            tensaoSaida = -4;
+        }
+        else
+        {
+            tensaoSaida = sinalTrava;
         }
         if( PV_T1 > 28)
         {
@@ -707,6 +714,7 @@ public class SinalSaida {
         }
                 
         configurarSimulacao();
+        System.out.println("A thread do controlador eh: " + Thread.currentThread());
     }
     
     void overshootMin(double tempoEmS)

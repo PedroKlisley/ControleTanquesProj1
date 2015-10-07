@@ -110,6 +110,7 @@ public class Grafico {
                 }
             }
         }
+        System.out.println("lfkdjhdskhaskjfhkjhsdfkjlshfkjshdkj A thread de atualizar série eh: " + Thread.currentThread());
     }
     
     public void updatePoint(ArrayList[] vetorDeItensDeGrafico)

@@ -32,12 +32,53 @@ import org.jfree.ui.RefineryUtilities;
 //Melhorar Simulação
 //Melhorar Gráfico
 
-public class ControleTanquesProj1 {
+public class ControleTanquesProj1 implements Runnable {
     //Ajeitar Periodo
     
     /**
      * @param args the command line arguments
      */
+    
+    static FrameInicial frame;
+    static Controle controle;// = new Controle();
+    static volatile boolean atualizar;// = false;    
+    
+    public void run() {
+        //System.out.println("Hello from a thread!");
+        int PERIODOENVIO = 100;                     //Período de leitura e escrita em ms
+        long tStart, tGeralStart;                   //Mostradores de tempo
+        boolean conectado = false;
+        tGeralStart = System.nanoTime(); 
+        
+        while(true)                                 //Rotina Thread Principal  
+        {
+            if (conectado)
+            {
+                //System.out.println("Teste Conexao");
+                tStart = System.nanoTime();
+
+                configurarSimulacao(controle, tGeralStart);
+
+                //rotinaDeControle(controle, tGeralStart, frame);
+
+                atualizar = true;
+                while(atualizar);
+                frame.SetControle(controle);
+                int a = PERIODOENVIO - (int)(System.nanoTime() - tStart)/1000000;
+                try {
+                    //System.out.println("Tempo de Rotina : " + a);
+                    Thread.sleep(retornaPositivo(a));
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ControleTanquesProj1.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else
+            {
+                conectado = frame.isConectado();
+                System.out.println("");
+            }
+        }
+    }
     
     static void configurarSimulacao(Controle controle, long tGeralStart)
     {
@@ -83,14 +124,15 @@ public class ControleTanquesProj1 {
     public static void main(String[] args) throws InterruptedException, ClassNotFoundException 
     {
         
-        int PERIODOENVIO = 100;                     //Período de leitura e escrita em ms
+        /*int PERIODOENVIO = 100;                     //Período de leitura e escrita em ms
         Controle controle = new Controle();
         long tStart, tGeralStart;                   //Mostradores de tempo
         tGeralStart = System.nanoTime();            //Tempo total
         
-        boolean conectado = false;
+        boolean conectado = false;*/
         
-        
+        controle = new Controle();
+        atualizar = false;    
         //JFrame.setDefaultLookAndFeelDecorated(true); 
                
         try {
@@ -110,32 +152,20 @@ public class ControleTanquesProj1 {
             java.util.logging.Logger.getLogger(FrameInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         
-        FrameInicial frame = new FrameInicial();
+        frame = new FrameInicial();
         frame.SetControle(controle);
         
         frame.setVisible(true);
         RefineryUtilities.centerFrameOnScreen(frame);
 
-        while(true)                                 //Rotina Thread Principal  
+        (new Thread(new ControleTanquesProj1())).start();
+        
+        while(true)
         {
-            if (conectado)
+            if(atualizar)
             {
-                //System.out.println("Teste Conexao");
-                tStart = System.nanoTime();
-
-                configurarSimulacao(controle, tGeralStart);
-
-                //rotinaDeControle(controle, tGeralStart, frame);
-
                 frame.AtualizarDados();
-                frame.SetControle(controle);
-                int a = PERIODOENVIO - (int)(System.nanoTime() - tStart)/1000000;
-                Thread.sleep(retornaPositivo(a));
-            }
-            else
-            {
-                conectado = frame.isConectado();
-                System.out.println("");
+                atualizar = false;
             }
         }
     }
